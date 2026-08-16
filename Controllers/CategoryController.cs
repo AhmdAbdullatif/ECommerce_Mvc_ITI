@@ -43,10 +43,8 @@ public class CategoryController : Controller
             return View(model);
         }
 
-        Category category =
-            new Category(model.Name.Trim());
-
-        await _categoryService.AddAsync(category);
+        await _categoryService.CreateAsync(
+            model.Name);
 
         return RedirectToAction(nameof(Index));
     }
@@ -86,7 +84,7 @@ public class CategoryController : Controller
         {
             await _categoryService.UpdateAsync(
                 model.Id,
-                model.Name.Trim());
+                model.Name);
         }
         catch (InvalidOperationException)
         {

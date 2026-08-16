@@ -24,9 +24,13 @@ public class CategoryService : ICategoryService
         return await _categoryRepository.GetByIdAsync(id);
     }
 
-    public async Task AddAsync(Category category)
+    public async Task CreateAsync(string name)
     {
+        Category category =
+            new Category(name.Trim());
+
         await _categoryRepository.AddAsync(category);
+
         await _categoryRepository.SaveChangesAsync();
     }
 
@@ -37,7 +41,7 @@ public class CategoryService : ICategoryService
         bool updated =
             await _categoryRepository.UpdateAsync(
                 id,
-                name);
+                name.Trim());
 
         if (!updated)
         {

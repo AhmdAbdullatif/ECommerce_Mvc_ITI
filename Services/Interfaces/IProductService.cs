@@ -15,7 +15,14 @@ public interface IProductService
         int id,
         string userId);
 
-    Task AddAsync(Product product);
+    Task CreateAsync(
+        int categoryId,
+        string name,
+        string description,
+        int quantity,
+        decimal price,
+        string pictureUri,
+        string userId);
 
     Task UpdateAsync(
         int id,

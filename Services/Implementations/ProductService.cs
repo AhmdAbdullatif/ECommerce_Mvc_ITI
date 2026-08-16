@@ -7,11 +7,14 @@ namespace ECommerce_Mvc.Services.Implementations;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
     public ProductService(
-        IProductRepository productRepository)
+        IProductRepository productRepository,
+        ICategoryRepository categoryRepository)
     {
         _productRepository = productRepository;
+        _categoryRepository = categoryRepository;
     }
 
     public async Task<List<Product>> GetAllAsync(
@@ -35,11 +38,38 @@ public class ProductService : IProductService
         string userId)
     {
         return await _productRepository
-            .GetByIdAndUserAsync(id, userId);
+            .GetByIdAndUserAsync(
+                id,
+                userId);
     }
 
-    public async Task AddAsync(Product product)
+    public async Task CreateAsync(
+        int categoryId,
+        string name,
+        string description,
+        int quantity,
+        decimal price,
+        string pictureUri,
+        string userId)
     {
+        bool categoryExists =
+            await _categoryRepository.ExistsAsync(categoryId);
+
+        if (!categoryExists)
+        {
+            throw new ArgumentException(
+                "Category does not exist.");
+        }
+
+        Product product = new Product(
+            categoryId,
+            name.Trim(),
+            description.Trim(),
+            quantity,
+            price,
+            pictureUri.Trim(),
+            userId);
+
         await _productRepository.AddAsync(product);
         await _productRepository.SaveChangesAsync();
     }
@@ -54,16 +84,25 @@ public class ProductService : IProductService
         decimal price,
         string pictureUri)
     {
+        bool categoryExists =
+            await _categoryRepository.ExistsAsync(categoryId);
+
+        if (!categoryExists)
+        {
+            throw new ArgumentException(
+                "Category does not exist.");
+        }
+
         bool updated =
             await _productRepository.UpdateAsync(
                 id,
                 userId,
                 categoryId,
-                name,
-                description,
+                name.Trim(),
+                description.Trim(),
                 quantity,
                 price,
-                pictureUri);
+                pictureUri.Trim());
 
         if (!updated)
         {
@@ -78,7 +117,9 @@ public class ProductService : IProductService
     {
         Product? product =
             await _productRepository
-                .GetByIdAndUserAsync(id, userId);
+                .GetByIdAndUserAsync(
+                    id,
+                    userId);
 
         if (product is null)
         {
@@ -87,7 +128,6 @@ public class ProductService : IProductService
         }
 
         _productRepository.Delete(product);
-
         await _productRepository.SaveChangesAsync();
     }
 }

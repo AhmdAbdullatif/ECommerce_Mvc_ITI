@@ -22,7 +22,6 @@ public class ProductController : Controller
         _categoryService = categoryService;
     }
 
-    // View Products + Search + Filter + Sort
     [HttpGet]
     public async Task<IActionResult> Index(
         string? searchText,
@@ -49,7 +48,6 @@ public class ProductController : Controller
         return View(products);
     }
 
-    // Product Details
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
@@ -64,7 +62,6 @@ public class ProductController : Controller
         return View(product);
     }
 
-    // Create Product Page
     [Authorize(Roles = AuthorizationConstants.SELLERS)]
     [HttpGet]
     public async Task<IActionResult> Create()
@@ -74,7 +71,6 @@ public class ProductController : Controller
         return View(new ProductCreateViewModel());
     }
 
-    // Create Product
     [Authorize(Roles = AuthorizationConstants.SELLERS)]
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -97,21 +93,26 @@ public class ProductController : Controller
             return Unauthorized();
         }
 
-        Product product = new Product(
-            model.CategoryId,
-            model.Name,
-            model.Description,
-            model.Quantity,
-            model.Price,
-            model.PictureUri,
-            userId);
-
-        await _productService.AddAsync(product);
+        try
+        {
+            await _productService.CreateAsync(
+                model.CategoryId,
+                model.Name,
+                model.Description,
+                model.Quantity,
+                model.Price,
+                model.PictureUri,
+                userId);
+        }
+        catch (ArgumentException)
+        {
+            return BadRequest(
+                "Category does not exist.");
+        }
 
         return RedirectToAction(nameof(Index));
     }
 
-    // Edit Product Page
     [Authorize(Roles = AuthorizationConstants.SELLERS)]
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
@@ -126,10 +127,9 @@ public class ProductController : Controller
         }
 
         Product? product =
-            await _productService
-                .GetSellerProductAsync(
-                    id,
-                    userId);
+            await _productService.GetSellerProductAsync(
+                id,
+                userId);
 
         if (product is null)
         {
@@ -154,7 +154,6 @@ public class ProductController : Controller
         return View(model);
     }
 
-    // Edit Product
     [Authorize(Roles = AuthorizationConstants.SELLERS)]
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -190,6 +189,11 @@ public class ProductController : Controller
                 model.Price,
                 model.PictureUri);
         }
+        catch (ArgumentException)
+        {
+            return BadRequest(
+                "Category does not exist.");
+        }
         catch (InvalidOperationException)
         {
             return Forbid();
@@ -198,7 +202,6 @@ public class ProductController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // Delete Product
     [Authorize(Roles = AuthorizationConstants.SELLERS)]
     [HttpPost]
     [ValidateAntiForgeryToken]
