@@ -1,0 +1,62 @@
+﻿@model ECommerce_Mvc.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Product Details</h2>
+
+    <div class="card shadow-sm">
+
+        @if (!string.IsNullOrWhiteSpace(Model.PictureUri))
+        {
+            <img src="@Model.PictureUri"
+                 class="card-img-top"
+                 style="max-height: 400px; object-fit: contain;"
+                 alt="@Model.Name" />
+        }
+
+        <div class="card-body">
+
+            <h3 class="card-title">
+                @Model.Name
+            </h3>
+
+            <p class="card-text">
+                @Model.Description
+            </p>
+
+            <hr />
+
+            <p>
+                <strong>Price:</strong>
+                @Model.Price.ToString("0.00")
+            </p>
+
+            <p>
+                <strong>Quantity:</strong>
+                @Model.Quantity
+            </p>
+
+            <p>
+                <strong>Category:</strong>
+                @(Model.Category?.Name ?? "N/A")
+            </p>
+
+            <p>
+                <strong>Created At:</strong>
+                @Model.CreatedAtUtc.ToString("dd/MM/yyyy")
+            </p>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Back to Products
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
