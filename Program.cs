@@ -1,8 +1,10 @@
-using ECommerce_Mvc.Models;
 using ECommerce_Mvc.Data;
+using ECommerce_Mvc.Extensions;
+using ECommerce_Mvc.Models;
+using ECommerce_Mvc.Services.Implementation;
+using ECommerce_Mvc.Services.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ECommerce_Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+// Identity
 
+
+builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -31,16 +36,26 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
 
-app.MapStaticAssets();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager =
+        scope.ServiceProvider
+            .GetRequiredService<RoleManager<IdentityRole>>();
+
+    await IdentitySeeder.SeedRolesAsync(roleManager);
+}
 
 app.Run();

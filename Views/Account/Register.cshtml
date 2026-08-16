@@ -1,0 +1,718 @@
+﻿@model ECommerce_Mvc.View_Model.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="register-page">
+    <div class="register-container">
+
+        ```
+        <!-- Left Side -->
+        <div class="register-info">
+
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="bi bi-bag-check-fill"></i>
+                </div>
+
+                <span>TeatId Store</span>
+            </div>
+
+            <div class="info-content">
+                <h1>Join Our Marketplace</h1>
+
+                <p>
+                    Create your account and discover thousands of
+                    products from trusted sellers.
+                </p>
+
+                <div class="features">
+
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+
+                        <div>
+                            <h6>Secure Account</h6>
+                            <span>Your data is protected with secure authentication.</span>
+                        </div>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-cart-check"></i>
+                        </div>
+
+                        <div>
+                            <h6>Easy Shopping</h6>
+                            <span>Find and order your favorite products easily.</span>
+                        </div>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="bi bi-shop"></i>
+                        </div>
+
+                        <div>
+                            <h6>Become a Seller</h6>
+                            <span>Apply to become a seller and grow your business.</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Right Side -->
+        <div class="register-form-container">
+
+            <div class="form-header">
+                <h2>Create Account</h2>
+
+                <p>
+                    Already have an account?
+                    <a asp-controller="Account"
+                       asp-action="Login">
+                        Login
+                    </a>
+                </p>
+            </div>
+
+
+            <form asp-action="Register"
+                  method="post"
+                  class="register-form">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="validation-summary">
+                </div>
+
+
+                <!-- First Name / Last Name -->
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="input-group-custom">
+
+                            <label asp-for="FirstName">
+                                First Name
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person"></i>
+
+                                <input asp-for="FirstName"
+                                       class="form-control"
+                                       placeholder="Enter your first name" />
+
+                            </div>
+
+                            <span asp-validation-for="FirstName"
+                                  class="field-validation">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <div class="input-group-custom">
+
+                            <label asp-for="LastName">
+                                Last Name
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="bi bi-person"></i>
+
+                                <input asp-for="LastName"
+                                       class="form-control"
+                                       placeholder="Enter your last name" />
+
+                            </div>
+
+                            <span asp-validation-for="LastName"
+                                  class="field-validation">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Email -->
+                <div class="input-group-custom">
+
+                    <label asp-for="Email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-envelope"></i>
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="example@email.com" />
+
+                    </div>
+
+                    <span asp-validation-for="Email"
+                          class="field-validation">
+                    </span>
+
+                </div>
+
+
+                <!-- Phone -->
+                <div class="input-group-custom">
+
+                    <label asp-for="PhoneNumber">
+                        Phone Number
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-telephone"></i>
+
+                        <input asp-for="PhoneNumber"
+                               class="form-control"
+                               placeholder="01xxxxxxxxx" />
+
+                    </div>
+
+                    <span asp-validation-for="PhoneNumber"
+                          class="field-validation">
+                    </span>
+
+                </div>
+
+
+                <!-- Password -->
+                <div class="input-group-custom">
+
+                    <label asp-for="Password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-lock"></i>
+
+                        <input asp-for="Password"
+                               class="form-control"
+                               placeholder="Create a strong password" />
+
+                    </div>
+
+                    <span asp-validation-for="Password"
+                          class="field-validation">
+                    </span>
+
+                </div>
+
+
+                <!-- Confirm Password -->
+                <div class="input-group-custom">
+
+                    <label asp-for="ConfirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-lock-fill"></i>
+
+                        <input asp-for="ConfirmPassword"
+                               class="form-control"
+                               placeholder="Confirm your password" />
+
+                    </div>
+
+                    <span asp-validation-for="ConfirmPassword"
+                          class="field-validation">
+                    </span>
+
+                </div>
+
+
+                <!-- Terms -->
+                <div class="terms">
+
+                    <input type="checkbox"
+                           id="terms"
+                           required />
+
+                    <label for="terms">
+                        I agree to the
+                        <a href="#">Terms & Conditions</a>
+                        and
+                        <a href="#">Privacy Policy</a>
+                    </label>
+
+                </div>
+
+
+                <!-- Submit -->
+                <button type="submit"
+                        class="register-btn">
+
+                    <i class="bi bi-person-plus"></i>
+
+                    Create Account
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+    ```
+
+</div>
+
+<style>
+
+    /* =========================
+       Register Page
+    ========================= */
+
+    .register-page {
+        min-height: calc(100vh - 70px);
+        background: #f5f7fb;
+        padding: 50px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .register-container {
+        width: 100%;
+        max-width: 1050px;
+        min-height: 650px;
+
+        background: #ffffff;
+
+        border-radius: 20px;
+
+        overflow: hidden;
+
+        display: grid;
+        grid-template-columns: 42% 58%;
+
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.08);
+    }
+
+
+    /* =========================
+       Left Side
+    ========================= */
+
+    .register-info {
+        background: linear-gradient(
+            145deg,
+            #111827,
+            #1f2937
+        );
+
+        color: white;
+
+        padding: 45px;
+
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    .register-info::after {
+        content: "";
+
+        position: absolute;
+
+        width: 250px;
+        height: 250px;
+
+        background: rgba(255,255,255,0.04);
+
+        border-radius: 50%;
+
+        right: -100px;
+        bottom: -80px;
+    }
+
+
+    .brand {
+        display: flex;
+        align-items: center;
+
+        gap: 12px;
+
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+
+    .brand-icon {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 12px;
+
+        background: #f59e0b;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #111827;
+    }
+
+
+    .info-content {
+        margin-top: 100px;
+    }
+
+
+    .info-content h1 {
+        font-size: 38px;
+        font-weight: 700;
+
+        line-height: 1.2;
+
+        margin-bottom: 20px;
+    }
+
+
+    .info-content > p {
+        color: #cbd5e1;
+
+        font-size: 15px;
+
+        line-height: 1.8;
+
+        max-width: 380px;
+    }
+
+
+    /* =========================
+       Features
+    ========================= */
+
+    .features {
+        margin-top: 45px;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 25px;
+    }
+
+
+    .feature {
+        display: flex;
+
+        gap: 15px;
+
+        align-items: flex-start;
+    }
+
+
+    .feature-icon {
+        width: 42px;
+        height: 42px;
+
+        flex-shrink: 0;
+
+        border-radius: 10px;
+
+        background: rgba(245,158,11,0.15);
+
+        color: #f59e0b;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .feature h6 {
+        margin: 0 0 5px;
+
+        font-size: 14px;
+    }
+
+
+    .feature span {
+        color: #94a3b8;
+
+        font-size: 12px;
+
+        line-height: 1.5;
+    }
+
+
+    /* =========================
+       Form Side
+    ========================= */
+
+    .register-form-container {
+        padding: 45px 55px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+
+    .form-header {
+        margin-bottom: 30px;
+    }
+
+
+    .form-header h2 {
+        font-size: 30px;
+
+        font-weight: 700;
+
+        color: #111827;
+
+        margin-bottom: 8px;
+    }
+
+
+    .form-header p {
+        color: #6b7280;
+
+        font-size: 14px;
+    }
+
+
+    .form-header a {
+        color: #f59e0b;
+
+        font-weight: 600;
+
+        text-decoration: none;
+    }
+
+
+    /* =========================
+       Inputs
+    ========================= */
+
+    .input-group-custom {
+        margin-bottom: 18px;
+    }
+
+
+    .input-group-custom label {
+        display: block;
+
+        margin-bottom: 7px;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        color: #374151;
+    }
+
+
+    .input-wrapper {
+        position: relative;
+    }
+
+
+    .input-wrapper i {
+        position: absolute;
+
+        left: 15px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        color: #9ca3af;
+
+        z-index: 2;
+    }
+
+
+    .input-wrapper .form-control {
+        height: 48px;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 10px;
+
+        padding-left: 43px;
+
+        font-size: 13px;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .input-wrapper .form-control:focus {
+        border-color: #f59e0b;
+
+        box-shadow:
+            0 0 0 3px rgba(245,158,11,0.12);
+    }
+
+
+    .field-validation {
+        color: #dc2626;
+
+        font-size: 11px;
+
+        margin-top: 4px;
+
+        display: block;
+    }
+
+
+    .validation-summary {
+        color: #dc2626;
+
+        font-size: 13px;
+
+        margin-bottom: 15px;
+    }
+
+
+    /* =========================
+       Terms
+    ========================= */
+
+    .terms {
+        display: flex;
+
+        align-items: flex-start;
+
+        gap: 8px;
+
+        margin: 5px 0 20px;
+
+        font-size: 12px;
+
+        color: #6b7280;
+    }
+
+
+    .terms input {
+        margin-top: 2px;
+    }
+
+
+    .terms a {
+        color: #f59e0b;
+
+        text-decoration: none;
+
+        font-weight: 600;
+    }
+
+
+    /* =========================
+       Button
+    ========================= */
+
+    .register-btn {
+        width: 100%;
+
+        height: 50px;
+
+        border: none;
+
+        border-radius: 10px;
+
+        background: #f59e0b;
+
+        color: #111827;
+
+        font-size: 14px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .register-btn i {
+        margin-right: 7px;
+    }
+
+
+    .register-btn:hover {
+        background: #d97706;
+
+        color: white;
+
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 8px 20px rgba(245,158,11,0.25);
+    }
+
+
+    /* =========================
+       Responsive
+    ========================= */
+
+    @@media (max-width: 850px) {
+
+        .register-container {
+            grid-template-columns: 1fr;
+        }
+
+        .register-info {
+            display: none;
+        }
+
+        .register-form-container {
+            padding: 40px 30px;
+        }
+
+    }
+
+
+    @@media (max-width: 576px) {
+
+        .register-page {
+            padding: 20px 10px;
+        }
+
+        .register-container {
+            border-radius: 14px;
+        }
+
+        .register-form-container {
+            padding: 30px 20px;
+        }
+
+        .form-header h2 {
+            font-size: 25px;
+        }
+
+    }
+
+</style>
