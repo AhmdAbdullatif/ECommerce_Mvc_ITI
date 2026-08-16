@@ -11,11 +11,13 @@ public class Product
     public DateTime CreatedAtUtc { get; private set; } = DateTime.UtcNow;
     public decimal Price { get; private set; }
     public int CategoryId { get; private set; }
+    public string SellerId { get; set; } = string.Empty;
     public Category? Category { get; private set; }
-
+    public string SellerId { get; set; } = string.Empty;
     public string UserId { get; private set; } = null!;
     public ApplicationUser? User { get; private set; }
 
+   
     public Product(int categoryId,
         string name,
         string description,

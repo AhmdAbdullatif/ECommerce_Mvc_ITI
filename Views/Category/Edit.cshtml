@@ -1,0 +1,220 @@
+﻿@model ECommerce_Mvc.ViewModels.CategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="container py-5">
+
+    <div class="form-wrapper mx-auto">
+
+        <!-- Header -->
+        <div class="form-header d-flex align-items-center mb-4 gap-3">
+            <div class="header-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+            <div>
+                <h2 class="fw-bold mb-0 text-white">Edit Category</h2>
+                <p class="text-muted mb-0 small">Update the details of the selected category.</p>
+            </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="surface-card">
+
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+
+                <!-- الحقل المخفي للاحتفاظ بالـ ID عند الحفظ -->
+                <input asp-for="Id" type="hidden" />
+
+                <div class="card-body p-4 p-md-5">
+
+                    <!-- Validation Summary -->
+                    <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+                    <!-- Category Name Input -->
+                    <div class="input-group-custom mb-0">
+                        <label asp-for="Name">Category Name</label>
+                        <div class="input-wrapper">
+                            <i class="bi bi-tag"></i>
+                            <input asp-for="Name" class="form-control" placeholder="e.g. Electronics, Clothing..." autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="Name" class="field-validation"></span>
+                    </div>
+
+                </div>
+
+                <!-- Card Footer with Buttons -->
+                <div class="card-footer p-4 bg-transparent border-top border-secondary border-opacity-25 d-flex gap-3 justify-content-end">
+                    <a asp-action="Index" class="btn btn-surface px-4 py-2 rounded-pill fw-semibold">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-gold px-5 py-2 rounded-pill fw-bold shadow-sm d-flex align-items-center gap-2">
+                        <i class="bi bi-check2-circle"></i> Save Changes
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    /* =========================
+           Variables
+        ========================= */
+    :root {
+        --form-bg: #161D2F;
+        --form-surface: #1F293D;
+        --border-color: #2A3449;
+        --text-main: #E2E8F0;
+        --text-muted: #94A3B8;
+        --accent-gold: #D4AF37;
+        --accent-gold-hover: #B5952F;
+    }
+
+    /* تقليل عرض الفورم لتكون أنيقة ومناسبة لحقل واحد */
+    .form-wrapper {
+        max-width: 600px;
+    }
+
+    /* =========================
+           Header Styles
+        ========================= */
+    .header-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 14px;
+        background: rgba(212, 175, 55, 0.1);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        color: var(--accent-gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    /* =========================
+           Card Styles
+        ========================= */
+    .surface-card {
+        background-color: var(--form-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 1.2rem;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+
+    /* =========================
+           Inputs & Form Controls
+        ========================= */
+    .input-group-custom label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-main);
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+        .input-wrapper > i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+        .input-wrapper .form-control {
+            height: 52px;
+            background-color: var(--form-surface) !important;
+            border: 1px solid var(--border-color);
+            color: #ffffff !important;
+            border-radius: 10px;
+            padding-left: 45px;
+            padding-right: 15px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: none;
+        }
+
+            .input-wrapper .form-control::placeholder {
+                color: #64748B !important;
+            }
+
+            /* Focus States */
+            .input-wrapper .form-control:focus {
+                border-color: var(--accent-gold);
+                background-color: #232d45 !important;
+                box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1) !important;
+            }
+
+                .input-wrapper .form-control:focus + i,
+                .input-wrapper:focus-within i {
+                    color: var(--accent-gold);
+                }
+
+    /* =========================
+           Validation
+        ========================= */
+    .field-validation, .validation-summary {
+        color: #EF4444;
+        font-size: 0.85rem;
+        margin-top: 6px;
+        display: block;
+        font-weight: 500;
+    }
+
+    .validation-summary {
+        margin-bottom: 25px;
+        padding: 15px;
+        border-radius: 10px;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+        .validation-summary ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+
+    /* =========================
+           Buttons
+        ========================= */
+    .btn-surface {
+        background-color: var(--form-surface);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+        .btn-surface:hover {
+            background-color: var(--border-color);
+            color: #ffffff;
+        }
+
+    .btn-gold {
+        background-color: var(--accent-gold);
+        color: #0B101E;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gold:hover {
+            background-color: var(--accent-gold-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25);
+        }
+</style>
