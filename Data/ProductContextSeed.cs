@@ -5,7 +5,8 @@ namespace ECommerce_Mvc.Data;
 
 public class ProductContextSeed
 {
-    public static async Task SeedAsync(AppDbContext context,
+    public static async Task SeedAsync(string sellerId,
+        AppDbContext context,
         ILogger logger,
         int retry = 0)
     {
@@ -20,7 +21,7 @@ public class ProductContextSeed
 
             await context.SaveChangesAsync();
 
-            var products = PreconfiguredProducts(categories);
+            var products = PreconfiguredProducts(sellerId, categories);
             if (!await context.Products.AnyAsync())
             {
                 await context.Products.AddRangeAsync(products);
@@ -33,7 +34,7 @@ public class ProductContextSeed
             retryForAvailability++;
 
             logger.LogError(ex.Message);
-            await SeedAsync(context, logger, retryForAvailability);
+            await SeedAsync(sellerId, context, logger, retryForAvailability);
             throw;
         }
 
@@ -52,7 +53,7 @@ public class ProductContextSeed
         ];
     }
 
-    private static List<Product> PreconfiguredProducts(
+    private static List<Product> PreconfiguredProducts(string sellerId,
         IEnumerable<Category> categories)
     {
         var categoryList = categories.ToList();
@@ -71,65 +72,65 @@ public class ProductContextSeed
                 "Classic Nike running shoes with visible Air cushioning",
                 50, 129.99m,
                 "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca"),
+                sellerId),
 
             new Product(shoes, "Ultraboost 22",
                 "High-performance running shoes with Boost midsole",
                 40, 189.99m,
                 "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca"),
+                sellerId),
 
             new Product(shoes, "Suede Classic",
                 "Iconic casual sneakers with suede upper",
                 60, 79.99m,
                 "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca"),
+                sellerId),
 
             // Clothing
             new Product(clothing, "Dri-FIT T-Shirt",
                 "Moisture-wicking training shirt",
                 100, 34.99m,
                 "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca"),
+                sellerId),
 
             new Product(clothing, "Essentials Hoodie",
                 "Comfortable everyday hoodie",
                 80, 59.99m,
                 "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca"),
+                sellerId),
 
             // Accessories
             new Product(accessories, "Sports Cap",
                 "Adjustable sports cap",
                 120, 24.99m,
                 "https://images.unsplash.com/photo-1588850561407-ed78c456fe18?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca"),
+                sellerId),
 
             // Electronics
             new Product(electronics, "iPhone 15",
                 "Latest smartphone with advanced camera system",
                 30, 999.00m,
                 "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca"),
+                sellerId),
 
             new Product(electronics, "Galaxy S24",
                 "Flagship Android smartphone",
                 25, 899.00m,
                 "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca"),
+                sellerId),
 
             // Home & Garden
             new Product(homeGarden, "Billy Bookcase",
                 "Classic bookshelf unit",
                 15, 79.00m,
                 "https://images.unsplash.com/photo-1594620302200-9a762244a156?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca"),
+                sellerId),
 
             new Product(homeGarden, "Klippan Sofa",
                 "Compact two-seat sofa",
                 10, 249.00m,
                 "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800",
-                "2cfa0607-b179-42d3-b2ae-75a66e0294ca")
+                sellerId)
         ];
     }
 }

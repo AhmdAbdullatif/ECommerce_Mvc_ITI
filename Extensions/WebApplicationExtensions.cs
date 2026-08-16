@@ -11,12 +11,12 @@ public static class WebApplicationExtensions
         using var scope = app.Services.CreateScope();
 
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        await ProductContextSeed.SeedAsync(dbContext, app.Logger, 3);
-
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        await IdentityContextSeed.SeedAsync(userManager, roleManager, app.Logger);
+        var sellerId = await IdentityContextSeed.SeedAsync(userManager, roleManager, app.Logger);
+
+        await ProductContextSeed.SeedAsync(sellerId, dbContext, app.Logger, 3);
     }
 
 }
