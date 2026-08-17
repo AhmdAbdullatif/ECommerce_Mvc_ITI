@@ -14,4 +14,24 @@ public class Cart
     {
         BuyerId = buyerId;
     }
+
+    public void AddItem(int productId, int quantity, decimal unitPrice)
+    {
+        if (quantity <= 0)
+            throw new ArgumentException("Quantity cannot be zero or negative");
+
+        if (unitPrice <= 0)
+            throw new ArgumentException("Unit price cannot be zero or negative");
+
+        var existingItem = _items.FirstOrDefault(x => x.ProductId == productId);
+        if (existingItem is null)
+        {
+            _items.Add(new CartItem(productId, Id, quantity, unitPrice));
+            return;
+        }
+        else
+        {
+            existingItem.AddQuantity(quantity);
+        }
+    }
 }

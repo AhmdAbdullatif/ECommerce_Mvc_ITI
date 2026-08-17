@@ -25,13 +25,20 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 builder.Services.AddControllersWithViews();
 
-// Repository Dependency Injection
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-// Service Dependency Injection
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+
 builder.Services.AddScoped<IProductService, ProductService>();
+
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+builder.Services.AddScoped<ICartService, CartService>();
+
+builder.Services.AddScoped<IAnonymousCartManager, AnonymousCartManager>();
+
 
 var app = builder.Build();
 

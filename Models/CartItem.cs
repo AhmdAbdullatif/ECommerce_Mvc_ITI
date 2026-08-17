@@ -20,4 +20,14 @@ public class CartItem
         UnitPrice = unitPrice;
     }
 
+    public void AddQuantity(int quantity)
+    {
+        if (quantity < 0 || quantity > int.MaxValue)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        Quantity += quantity;
+    }
+
 }
