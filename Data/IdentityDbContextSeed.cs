@@ -6,11 +6,10 @@ namespace ECommerce_Mvc.Data;
 
 public static class IdentityContextSeed
 {
-    public static async Task<string> SeedAsync(UserManager<ApplicationUser> userManager,
+    public static async Task SeedAsync(UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
         ILogger logger)
     {
-        ApplicationUser? seller = null;
         try
         {
             await roleManager.CreateAsync(new IdentityRole(AuthorizationConstants.ADMINISTRATORS));
@@ -19,7 +18,7 @@ public static class IdentityContextSeed
             var defaultUser = new ApplicationUser { UserName = "user@exmaple.com", Email = "user@example.com" };
             await userManager.CreateAsync(defaultUser, AuthorizationConstants.DEFAULT_PASSWORD);
 
-            seller = new ApplicationUser { UserName = "seller@example.com", Email = "seller@example.com" };
+            var seller = new ApplicationUser { UserName = "seller@example.com", Email = "seller@example.com" };
             await userManager.CreateAsync(seller, AuthorizationConstants.DEFAULT_PASSWORD);
             seller = await userManager.FindByNameAsync(seller.UserName);
             if (seller != null)
@@ -40,8 +39,6 @@ public static class IdentityContextSeed
         {
             logger.LogError(ex, "An error occurred while seeding the database with Identity users");
         }
-
-        return seller!.Id;
     }
 
 }
