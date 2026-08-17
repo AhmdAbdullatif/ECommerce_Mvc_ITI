@@ -1,16 +1,19 @@
+using ECommerce_Mvc.Constants;
 using ECommerce_Mvc.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce_Mvc.Data;
 
 public class ProductContextSeed
 {
-    public static async Task SeedAsync(string sellerId,
-        AppDbContext context,
+    public static async Task SeedAsync(AppDbContext context,
+        UserManager<ApplicationUser> userManager,
         ILogger logger,
         int retry = 0)
     {
         int retryForAvailability = retry;
+        string sellerId;
         try
         {
             var categories = PreconfiguredProductCategories();
@@ -20,6 +23,21 @@ public class ProductContextSeed
             }
 
             await context.SaveChangesAsync();
+
+            var sellerEmail = "seller@example.com";
+            var seller = await userManager.FindByEmailAsync(sellerEmail);
+            if (seller is null)
+            {
+                seller = new ApplicationUser()
+                {
+                    Email = sellerEmail,
+                    UserName = sellerEmail
+                };
+
+                await userManager.CreateAsync(seller, AuthorizationConstants.DEFAULT_PASSWORD);
+                await userManager.AddToRoleAsync(seller, AuthorizationConstants.SELLERS);
+            }
+            sellerId = seller.Id;
 
             var products = PreconfiguredProducts(sellerId, categories);
             if (!await context.Products.AnyAsync())
@@ -34,7 +52,7 @@ public class ProductContextSeed
             retryForAvailability++;
 
             logger.LogError(ex.Message);
-            await SeedAsync(sellerId, context, logger, retryForAvailability);
+            await SeedAsync(context, userManager, logger, retryForAvailability);
             throw;
         }
 
