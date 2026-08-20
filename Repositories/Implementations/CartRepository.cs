@@ -39,6 +39,11 @@ public class CartRepository(AppDbContext context) : ICartRepository
     {
         await context.AddAsync(cart);
     }
+    
+    public void Remove(Cart cart)
+    {
+        context.Remove(cart);
+    }
 
     public async Task SaveChangesAsync()
     {

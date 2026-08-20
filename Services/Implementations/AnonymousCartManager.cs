@@ -4,7 +4,7 @@ using ECommerce_Mvc.Services.Interfaces;
 
 namespace ECommerce_Mvc.Services.Implementations;
 
-public class AnonymousCartManager : IAnonymousCartManager
+public class AnonymousCartManager(ICartService cartService) : IAnonymousCartManager
 {
     public string GetOrSetCookieAndUserEmail(HttpContext httpContext)
     {
@@ -38,6 +38,20 @@ public class AnonymousCartManager : IAnonymousCartManager
         });
 
         return anonymousId;
+    }
 
+    public async Task TransferAnonymousCartToUserAsync(HttpContext httpContext, string userEmail)
+    {
+        if (httpContext.Request.Cookies.ContainsKey(CartConstants.CART_COOKIENAME))
+        {
+            var anonymousId = httpContext.Request.Cookies[CartConstants.CART_COOKIENAME];
+
+            if (string.IsNullOrWhiteSpace(anonymousId))
+                return;
+
+            await cartService.TransferCartAsync(anonymousId, userEmail);
+
+            httpContext.Response.Cookies.Delete(CartConstants.CART_COOKIENAME);
+        }
     }
 }

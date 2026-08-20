@@ -30,4 +30,14 @@ public class CartItem
         Quantity += quantity;
     }
 
+    public void UpdateQuantity(int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        Quantity = quantity;
+    }
+
 }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ECommerce_Mvc.Requests;
+namespace ECommerce_Mvc.Models.Requests;
 
 public class AddItemToCartRequest
 {
@@ -8,5 +8,6 @@ public class AddItemToCartRequest
     public int ProductId { get; set; }
 
     [Required]
+    [Range(minimum: 1, maximum: int.MaxValue)]
     public int Quantity { get; set; }
 }

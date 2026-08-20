@@ -34,4 +34,21 @@ public class Cart
             existingItem.AddQuantity(quantity);
         }
     }
+
+    public void RemoveItem(int productId)
+    {
+        var item = _items.FirstOrDefault(x => x.ProductId == productId);
+        if (item == null)
+            return;
+
+        _items.Remove(item);
+    }
+
+    public void UpdateItemQuantity(int productId, int quantity)
+    {
+        var item = _items.FirstOrDefault(x => x.ProductId == productId)
+            ?? throw new ArgumentException($"Product with ID: {productId} is not in the cart.");
+
+        item.UpdateQuantity(quantity);
+    }
 }
