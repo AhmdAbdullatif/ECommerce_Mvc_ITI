@@ -4,108 +4,311 @@
     ViewData["Title"] = "Edit Product";
 }
 
-<div class="container mt-4">
+<div class="container py-5">
 
-    <h2 class="mb-4">Edit Product</h2>
+    <div class="form-wrapper mx-auto">
 
-    <form asp-action="Edit" method="post">
-
-        @Html.AntiForgeryToken()
-
-        <input asp-for="Id" type="hidden" />
-
-        <div asp-validation-summary="ModelOnly"
-             class="text-danger mb-3">
+        <!-- Header -->
+        <div class="form-header d-flex align-items-center mb-4 gap-3">
+            <div class="header-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+            <div>
+                <h2 class="fw-bold mb-0 text-white">Edit Product</h2>
+                <p class="text-muted mb-0 small">Update the details and pricing of the selected product.</p>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label asp-for="Name"
-                   class="form-label"></label>
+        <!-- Form Card -->
+        <div class="surface-card">
 
-            <input asp-for="Name"
-                   class="form-control" />
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
 
-            <span asp-validation-for="Name"
-                  class="text-danger"></span>
+                <!-- الحقل المخفي الخاص بالـ ID -->
+                <input asp-for="Id" type="hidden" />
+
+                <div class="card-body p-4 p-md-5">
+
+                    <!-- Validation Summary -->
+                    <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+                    <div class="row g-4">
+
+                        <!-- Product Name -->
+                        <div class="col-md-6">
+                            <div class="input-group-custom">
+                                <label asp-for="Name">Product Name</label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-tag"></i>
+                                    <input asp-for="Name" class="form-control" placeholder="e.g. Nike Air Max" />
+                                </div>
+                                <span asp-validation-for="Name" class="field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="col-md-6">
+                            <div class="input-group-custom">
+                                <label asp-for="CategoryId">Category</label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-folder2-open"></i>
+                                    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select custom-select">
+                                    </select>
+                                </div>
+                                <span asp-validation-for="CategoryId" class="field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="col-md-6">
+                            <div class="input-group-custom">
+                                <label asp-for="Price">Price</label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-currency-dollar"></i>
+                                    <input asp-for="Price" class="form-control" placeholder="0.00" type="number" step="0.01" />
+                                </div>
+                                <span asp-validation-for="Price" class="field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="col-md-6">
+                            <div class="input-group-custom">
+                                <label asp-for="Quantity">Quantity in Stock</label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-stack"></i>
+                                    <input asp-for="Quantity" class="form-control" placeholder="0" type="number" />
+                                </div>
+                                <span asp-validation-for="Quantity" class="field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="col-12">
+                            <div class="input-group-custom">
+                                <label asp-for="Description">Product Description</label>
+                                <div class="input-wrapper textarea-wrapper">
+                                    <i class="bi bi-card-text"></i>
+                                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Write a brief description of the product..."></textarea>
+                                </div>
+                                <span asp-validation-for="Description" class="field-validation"></span>
+                            </div>
+                        </div>
+
+                        <!-- Picture URI -->
+                        <div class="col-12">
+                            <div class="input-group-custom">
+                                <label asp-for="PictureUri">Picture URL</label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-image"></i>
+                                    <input asp-for="PictureUri" class="form-control" placeholder="https://example.com/image.jpg" />
+                                </div>
+                                <span asp-validation-for="PictureUri" class="field-validation"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Card Footer with Buttons -->
+                <div class="card-footer p-4 bg-transparent border-top border-secondary border-opacity-25 d-flex gap-3 justify-content-end">
+                    <a asp-action="Index" class="btn btn-surface px-4 py-2 rounded-pill fw-semibold">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-gold px-5 py-2 rounded-pill fw-bold shadow-sm d-flex align-items-center gap-2">
+                        <i class="bi bi-check2-circle"></i> Save Changes
+                    </button>
+                </div>
+
+            </form>
+
         </div>
-
-        <div class="mb-3">
-            <label asp-for="Description"
-                   class="form-label"></label>
-
-            <textarea asp-for="Description"
-                      class="form-control"
-                      rows="4"></textarea>
-
-            <span asp-validation-for="Description"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Price"
-                   class="form-label"></label>
-
-            <input asp-for="Price"
-                   class="form-control" />
-
-            <span asp-validation-for="Price"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Quantity"
-                   class="form-label"></label>
-
-            <input asp-for="Quantity"
-                   class="form-control" />
-
-            <span asp-validation-for="Quantity"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="CategoryId"
-                   class="form-label">
-                Category
-            </label>
-
-            <select asp-for="CategoryId"
-                    asp-items="ViewBag.Categories"
-                    class="form-select">
-            </select>
-
-            <span asp-validation-for="CategoryId"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="PictureUri"
-                   class="form-label">
-                Picture URL
-            </label>
-
-            <input asp-for="PictureUri"
-                   class="form-control" />
-
-            <span asp-validation-for="PictureUri"
-                  class="text-danger"></span>
-        </div>
-
-        <button type="submit"
-                class="btn btn-primary">
-            Save Changes
-        </button>
-
-        <a asp-action="Index"
-           class="btn btn-secondary">
-            Cancel
-        </a>
-
-    </form>
-
+    </div>
 </div>
 
-@section Scripts
-{
+@section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<style>
+    /* =========================
+           Variables
+        ========================= */
+    :root {
+        --form-bg: #161D2F;
+        --form-surface: #1F293D;
+        --border-color: #2A3449;
+        --text-main: #E2E8F0;
+        --text-muted: #94A3B8;
+        --accent-gold: #D4AF37;
+        --accent-gold-hover: #B5952F;
+    }
+
+    .form-wrapper {
+        max-width: 850px; /* الحفاظ على العرض الكبير ليناسب العمودين */
+    }
+
+    /* =========================
+           Header Styles
+        ========================= */
+    .header-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 14px;
+        background: rgba(212, 175, 55, 0.1);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        color: var(--accent-gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    /* =========================
+           Card Styles
+        ========================= */
+    .surface-card {
+        background-color: var(--form-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 1.2rem;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+
+    /* =========================
+           Inputs & Form Controls
+        ========================= */
+    .input-group-custom {
+        margin-bottom: 5px;
+    }
+
+        .input-group-custom label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+        .input-wrapper > i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+    .textarea-wrapper > i {
+        top: 15px;
+        transform: none;
+    }
+
+    .input-wrapper .form-control,
+    .input-wrapper .custom-select {
+        background-color: var(--form-surface) !important;
+        border: 1px solid var(--border-color);
+        color: #ffffff !important;
+        border-radius: 10px;
+        padding-left: 45px;
+        padding-right: 15px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-shadow: none;
+    }
+
+    .input-wrapper .form-control {
+        height: 50px;
+    }
+
+    .input-wrapper .custom-select {
+        height: 50px;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394A3B8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+    }
+
+    .input-wrapper textarea.form-control {
+        height: auto;
+        padding-top: 15px;
+        resize: vertical;
+    }
+
+    .input-wrapper .form-control::placeholder {
+        color: #64748B !important;
+    }
+
+    /* Focus States */
+    .input-wrapper .form-control:focus,
+    .input-wrapper .custom-select:focus {
+        border-color: var(--accent-gold);
+        background-color: #232d45 !important;
+        box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1) !important;
+    }
+
+        .input-wrapper .form-control:focus + i,
+        .input-wrapper:focus-within i {
+            color: var(--accent-gold);
+        }
+
+    /* =========================
+           Validation
+        ========================= */
+    .field-validation, .validation-summary {
+        color: #EF4444;
+        font-size: 0.85rem;
+        margin-top: 6px;
+        display: block;
+        font-weight: 500;
+    }
+
+    .validation-summary {
+        margin-bottom: 25px;
+        padding: 15px;
+        border-radius: 10px;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+        .validation-summary ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+
+    /* =========================
+           Buttons
+        ========================= */
+    .btn-surface {
+        background-color: var(--form-surface);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+        .btn-surface:hover {
+            background-color: var(--border-color);
+            color: #ffffff;
+        }
+
+    .btn-gold {
+        background-color: var(--accent-gold);
+        color: #0B101E;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gold:hover {
+            background-color: var(--accent-gold-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25);
+        }
+</style>
