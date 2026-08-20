@@ -14,9 +14,9 @@ public static class WebApplicationExtensions
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        var sellerId = await IdentityContextSeed.SeedAsync(userManager, roleManager, app.Logger);
+        await IdentityContextSeed.SeedAsync(userManager, roleManager, app.Logger);
 
-        await ProductContextSeed.SeedAsync(sellerId, dbContext, app.Logger, 3);
+        await ProductContextSeed.SeedAsync(dbContext, userManager, app.Logger, 3);
     }
 
 }
