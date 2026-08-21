@@ -26,7 +26,7 @@ namespace ECommerce_Mvc.Services.Implementations
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
-                UserName = model.Email, // استخدام الإيميل كـ UserName
+                UserName = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
@@ -36,8 +36,17 @@ namespace ECommerce_Mvc.Services.Implementations
 
             if (result.Succeeded)
             {
-                // إضافة المستخدم لصلاحية Customer وتسجيل دخوله
-                await _userManager.AddToRoleAsync(user, AuthorizationConstants.SELLERS);
+                // 1. إضافة الصلاحية وحفظ النتيجة في متغير (يفضل أن يكون Customer للمسجلين الجدد)
+                var roleResult = await _userManager.AddToRoleAsync(user, AuthorizationConstants.ADMINISTRATORS);
+
+                // 2. التحقق من نجاح إضافة الصلاحية
+                if (!roleResult.Succeeded)
+                {
+                    // إذا فشلت (بسبب عدم وجود الصلاحية في الداتابيز مثلاً)، نرجع الخطأ للكنترولر
+                    return roleResult;
+                }
+
+                // 3. تسجيل الدخول فقط بعد التأكد من أخذ الصلاحية
                 await _signInManager.SignInAsync(user, isPersistent: false);
             }
 

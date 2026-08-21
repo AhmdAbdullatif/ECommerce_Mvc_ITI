@@ -13,7 +13,6 @@ public class Product
     public int CategoryId { get; private set; }
     public string SellerId { get; set; } = string.Empty;
     public Category? Category { get; private set; }
-    public string SellerId { get; set; } = string.Empty;
     public string UserId { get; private set; } = null!;
     public ApplicationUser? User { get; private set; }
 

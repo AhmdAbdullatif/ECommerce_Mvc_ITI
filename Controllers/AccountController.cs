@@ -1,5 +1,5 @@
 ﻿using ECommerce_Mvc.Models;
-using ECommerce_Mvc.View_Model;
+using ECommerce_Mvc.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

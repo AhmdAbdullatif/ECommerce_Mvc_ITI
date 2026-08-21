@@ -1,6 +1,4 @@
-﻿@using ECommerce_Mvc.Constants
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -15,49 +13,114 @@
     <link rel="stylesheet" href="~/E_Commerce.styles.css" asp-append-version="true" />
 
     <style>
-            /* تحسين شكل اللينكات */
+            /* تعريف الألوان الأساسية للموقع بالكامل (Premium Dark Theme) */
+            :root {
+                --bg-main: #0B101E; /* خلفية الموقع */
+                --bg-surface: #161D2F; /* خلفية النافبار والفوتر */
+                --border-color: #2A3449; /* لون الحدود */
+                --text-main: #E2E8F0; /* لون النصوص الأساسية */
+                --text-muted: #94A3B8; /* لون النصوص الفرعية */
+                --accent-gold: #D4AF37; /* اللون الذهبي */
+                --accent-gold-hover: #B5952F;
+            }
+
+            body {
+                background-color: var(--bg-main);
+                color: var(--text-main);
+            }
+
+            /* Navbar Premium Styles */
+            .navbar-premium {
+                background-color: var(--bg-surface) !important;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            }
+
+            .text-gold {
+                color: var(--accent-gold) !important;
+            }
+
             .navbar-nav .nav-link {
+                color: var(--text-main) !important;
                 transition: color 0.3s ease, transform 0.2s ease;
             }
 
-                .navbar-nav .nav-link:hover {
-                    color: #0d6efd;
+                .navbar-nav .nav-link:hover,
+                .navbar-nav .nav-link:focus,
+                .navbar-nav .nav-link.active {
+                    color: var(--accent-gold) !important;
                     transform: translateY(-2px);
                 }
 
-            /* navbar ثابت */
-            .navbar {
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            /* Dropdown Dark Mode Override */
+            .dropdown-menu-dark {
+                background-color: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             }
 
-            /* زرار الكارت */
-            .btn-outline-dark {
+                .dropdown-menu-dark .dropdown-item {
+                    color: var(--text-main);
+                    transition: all 0.2s;
+                }
+
+                    .dropdown-menu-dark .dropdown-item:hover {
+                        background-color: var(--border-color);
+                        color: var(--accent-gold);
+                    }
+
+            .dropdown-divider {
+                border-top-color: var(--border-color);
+            }
+
+            /* Buttons Premium Styles */
+            .btn-gold {
+                background-color: var(--accent-gold);
+                color: #0B101E;
+                font-weight: 600;
+                border: 1px solid var(--accent-gold);
                 transition: all 0.3s ease;
             }
 
-                .btn-outline-dark:hover {
-                    background-color: #0d6efd;
-                    border-color: #0d6efd;
-                    color: #fff;
+                .btn-gold:hover {
+                    background-color: var(--accent-gold-hover);
+                    border-color: var(--accent-gold-hover);
+                    color: #0B101E;
+                }
+
+            .btn-outline-gold {
+                color: var(--accent-gold);
+                border: 1px solid var(--accent-gold);
+                background-color: transparent;
+                transition: all 0.3s ease;
+            }
+
+                .btn-outline-gold:hover {
+                    background-color: var(--accent-gold);
+                    color: #0B101E;
                 }
 
             /* Footer */
-            footer {
+            footer.footer-premium {
+                background-color: var(--bg-surface);
+                border-top: 1px solid var(--border-color);
                 margin-top: 50px;
             }
 
-                footer p {
+                footer.footer-premium p {
+                    color: var(--text-muted) !important;
                     font-size: 0.9rem;
                     letter-spacing: 1px;
                 }
     </style>
 </head>
-
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+    <!-- Navbar (Dark Theme) -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-premium sticky-top">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand fw-bold text-primary" asp-controller="Home" asp-action="Index">E_Commerce</a>
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold text-gold" asp-controller="Home" asp-action="Index">E_Commerce</a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent"
@@ -70,9 +133,11 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item"><a class="nav-link active fw-semibold" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" asp-controller="Home" asp-action="About">About</a></li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-semibold" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                        <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdown">
+                        <!-- Dark Dropdown Menu -->
+                        <ul class="dropdown-menu dropdown-menu-dark shadow" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" asp-controller="Products" asp-action="Index">All Products</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item" asp-controller="Products" asp-action="Popular">Popular Items</a></li>
@@ -82,57 +147,44 @@
 
                     @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                     {
-                        <!-- زرار ManagementSystem (تم إصلاح علامة التنصيص الزائدة هنا) -->
                         <li class="nav-item">
                             <a class="nav-link fw-semibold" href="/Admin">ManagementSystem</a>
                         </li>
                     }
-
                 </ul>
 
                 <!-- Cart + Login/Register OR Welcome + Logout -->
                 <ul class="navbar-nav d-flex align-items-center">
                     <li class="nav-item me-3">
-                        <a class="btn btn-outline-dark" asp-controller="Cart" asp-action="Index">
+                        <a class="btn btn-outline-gold rounded-pill px-3" asp-controller="Cart" asp-action="Index">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                            <!-- Custom Badge color -->
+                            <span class="badge ms-1 rounded-pill" style="background-color: var(--accent-gold); color: #0B101E;">0</span>
                         </a>
                     </li>
 
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item me-2">
-                            <span class="nav-link fw-semibold text-primary">
+                            <span class="nav-link fw-semibold text-gold">
                                 Welcome, @User.Identity.Name 👋
                             </span>
                         </li>
                         <li class="nav-item">
-                            <!-- تم تعديل زر Logout ليصبح button داخل الـ Form -->
                             <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-danger btn-sm rounded-pill">Logout</button>
+                                <!-- استخدمنا زر أحمر أنيق لتسجيل الخروج -->
+                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">Logout</button>
                             </form>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item">
-                            <a class="btn btn-outline-primary btn-sm rounded-pill me-2" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="btn btn-outline-gold btn-sm rounded-pill me-2 px-4 py-2" asp-controller="Account" asp-action="Login">Login</a>
                         </li>
-
-                        @if (User.IsInRole(AuthorizationConstants.ADMINISTRATORS))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Category"
-                                   asp-action="Index">
-                                    Categories
-                                </a>
-                            </li>
-                        }
-
                         <li class="nav-item">
-                            <a class="btn btn-primary btn-sm rounded-pill" asp-controller="Account" asp-action="Register">Register</a>
+                            <a class="btn btn-gold btn-sm rounded-pill px-4 py-2" asp-controller="Account" asp-action="Register">Register</a>
                         </li>
                     }
                 </ul>
@@ -145,20 +197,17 @@
         @RenderBody()
     </main>
 
-    <!-- Footer -->
-    <footer class="py-4 bg-dark">
+    <!-- Footer (Dark Theme) -->
+    <footer class="py-4 footer-premium">
         <div class="container">
-            <p class="m-0 text-center text-white">© 2023 E_Commerce. All rights reserved.</p>
+            <p class="m-0 text-center">© 2023 E_Commerce. All rights reserved.</p>
         </div>
-
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

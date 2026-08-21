@@ -239,34 +239,19 @@ namespace ECommerce_Mvc.Migrations
 
                     b.Property<string>("SellerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("SellerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            CreatedAtUtc = new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "High performance laptop",
-                            Name = "Laptop",
-                            PictureUri = "laptop.png",
-                            Price = 15000m,
-                            Quantity = 10,
-                            SellerId = "a6f76fb7-5b39-4ecb-9639-f3bba5117dd5",
-                            UserId = "a6f76fb7-5b39-4ecb-9639-f3bba5117dd5"
-                        });
                 });
 
             modelBuilder.Entity("ECommerce_Mvc.Models.SellerRequest", b =>
@@ -528,8 +513,8 @@ namespace ECommerce_Mvc.Migrations
 
                     b.HasOne("ECommerce_Mvc.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");

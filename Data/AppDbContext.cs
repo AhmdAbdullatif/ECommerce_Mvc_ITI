@@ -24,23 +24,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
 
-        string realSellerId = "a6f76fb7-5b39-4ecb-9639-f3bba5117dd5";
-
-        builder.Entity<Product>().HasData(
-         new
-         {
-             Id = 1,
-             CategoryId = 1, // تأكد أن لديك قسم (Category) يمتلك Id رقم 1
-             Name = "Laptop",
-             Description = "High performance laptop",
-             Quantity = 10,
-             Price = 15000m,
-             PictureUri = "laptop.png",
-             CreatedAtUtc = new DateTime(2023, 10, 1, 0, 0, 0, DateTimeKind.Utc), // يفضل تثبيت الوقت في السِيد
-             UserId = realSellerId,
-             SellerId = realSellerId // يمكنك وضع null هنا إذا أردت لأننا جعلناه يقبل null
-         }
-        );
 
 
 
@@ -51,12 +34,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(sr => sr.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // ApplicationUser -> Product
-        builder.Entity<Product>()
-            .HasOne(p => p.User)
-            .WithMany()
-            .HasForeignKey(p => p.SellerId)
-            .OnDelete(DeleteBehavior.Restrict);
+      
     }
 
 }

@@ -26,5 +26,7 @@ namespace ECommerce_Mvc.ViewModels
         [Compare("Password")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+        public bool IsSeller { get; set; }
     }
 }
