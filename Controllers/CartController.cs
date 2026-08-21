@@ -7,6 +7,7 @@ namespace ECommerce_Mvc.Controllers;
 public class CartController(ICartService cartService, IAnonymousCartManager anonymousCartManager) : Controller
 {
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddItem([FromForm] AddItemToCartRequest request)
     {
         if (!ModelState.IsValid)

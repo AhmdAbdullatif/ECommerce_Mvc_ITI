@@ -84,6 +84,8 @@ public class CartService(IProductRepository productRepository,
         if (userCart == null)
         {
             userCart = new Cart(userEmail);
+            await cartRepository.AddAsync(userCart);
+            await cartRepository.SaveChangesAsync();
         }
 
         foreach (var item in anonymousCart.Items)
@@ -92,8 +94,6 @@ public class CartService(IProductRepository productRepository,
         }
 
         cartRepository.Remove(anonymousCart);
-        await cartRepository.AddAsync(userCart);
-
         await cartRepository.SaveChangesAsync();
     }
 }

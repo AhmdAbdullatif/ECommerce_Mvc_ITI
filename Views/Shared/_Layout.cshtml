@@ -104,7 +104,13 @@
             footer.footer-premium {
                 background-color: var(--bg-surface);
                 border-top: 1px solid var(--border-color);
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
                 margin-top: 50px;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
             }
 
                 footer.footer-premium p {
@@ -138,17 +144,50 @@
                         <a class="nav-link dropdown-toggle fw-semibold" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                         <!-- Dark Dropdown Menu -->
                         <ul class="dropdown-menu dropdown-menu-dark shadow" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" asp-controller="Products" asp-action="Index">All Products</a></li>
+                            <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">All Products</a></li>
                             <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" asp-controller="Products" asp-action="Popular">Popular Items</a></li>
-                            <li><a class="dropdown-item" asp-controller="Products" asp-action="New">New Arrivals</a></li>
+                            <li><a class="dropdown-item" asp-controller="Product" asp-action="Popular">Popular Items</a></li>
+                            <li><a class="dropdown-item" asp-controller="Product" asp-action="New">New Arrivals</a></li>
                         </ul>
                     </li>
 
+                    <!-- ========================================== -->
+                    <!-- إدارة صلاحيات البائعين والمستخدمين في النافبار -->
+                    <!-- ========================================== -->
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Seller"))
+                        {
+                            <!-- 1. إذا كان المستخدم بائعاً معتمداً -->
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold text-gold" asp-controller="Seller" asp-action="Index">
+                                    <i class="bi bi-shop me-1"></i> Seller Dashboard
+                                </a>
+                            </li>
+                        }
+                        else if (!User.IsInRole("Admin") && !User.IsInRole("SuperAdmin"))
+                        {
+                            <!-- 2. إذا كان مستخدماً عادياً (نظهر له زر إرسال طلب) -->
+                            <li class="nav-item">
+                                <form asp-controller="Seller" asp-action="SubmitRequest" method="post" class="d-inline">
+                                    <button type="submit" class="nav-link fw-semibold bg-transparent border-0" onclick="return confirm('هل تريد إرسال طلب للإدارة لتصبح بائعاً في منصتنا؟');">
+                                        <i class="bi bi-shop-window me-1"></i> Become a Seller
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                    }
+
                     @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                     {
+                        <!-- 3. روابط خاصة بمدير النظام -->
                         <li class="nav-item">
                             <a class="nav-link fw-semibold" href="/Admin">ManagementSystem</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-semibold" asp-controller="Seller" asp-action="PendingRequests">
+                                <i class="bi bi-person-lines-fill me-1"></i> Seller Requests
+                            </a>
                         </li>
                     }
                 </ul>
@@ -173,7 +212,6 @@
                         </li>
                         <li class="nav-item">
                             <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                <!-- استخدمنا زر أحمر أنيق لتسجيل الخروج -->
                                 <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">Logout</button>
                             </form>
                         </li>
@@ -200,7 +238,7 @@
     <!-- Footer (Dark Theme) -->
     <footer class="py-4 footer-premium">
         <div class="container">
-            <p class="m-0 text-center">© 2023 E_Commerce. All rights reserved.</p>
+            <p class="m-0 text-center">© 2026 E_Commerce. All rights reserved.</p>
         </div>
     </footer>
 
