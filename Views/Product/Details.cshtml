@@ -92,7 +92,7 @@
                 <div class="img-container">
                     @if (!string.IsNullOrWhiteSpace(Model.PictureUri))
                     {
-                        <img src="@Model.PictureUri" class="details-img" alt="@Model.Name" />
+                        <img src="~/images/@Model.PictureUri" class="details-img" alt="@Model.Name" />
                     }
                     else
                     {
@@ -157,9 +157,22 @@
 
                     <!-- Add to Cart Action -->
                     <div class="mt-auto">
-                        <button class="btn btn-gold btn-lg w-100 rounded-pill fw-bold shadow">
-                            Add to Cart
-                        </button>
+                        <form asp-controller="Cart" asp-action="AddItem" method="post" class="d-flex gap-2">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="ProductId" value="@Model.Id" />
+
+                            <div class="flex-grow-1">
+                                <input type="number" name="Quantity" value="1" min="1" class="form-control" style="max-width:140px;" />
+                            </div>
+
+                            <div style="width:100%">
+                                <button type="submit" class="btn btn-gold btn-lg w-100 rounded-pill fw-bold shadow" 
+                                        @(Model.Quantity <= 0 ? "disabled" : "")>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                 </div>

@@ -104,7 +104,13 @@
             footer.footer-premium {
                 background-color: var(--bg-surface);
                 border-top: 1px solid var(--border-color);
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
                 margin-top: 50px;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
             }
 
                 footer.footer-premium p {
@@ -138,10 +144,10 @@
                         <a class="nav-link dropdown-toggle fw-semibold" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                         <!-- Dark Dropdown Menu -->
                         <ul class="dropdown-menu dropdown-menu-dark shadow" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" asp-controller="Products" asp-action="Index">All Products</a></li>
+                            <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">All Products</a></li>
                             <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" asp-controller="Products" asp-action="Popular">Popular Items</a></li>
-                            <li><a class="dropdown-item" asp-controller="Products" asp-action="New">New Arrivals</a></li>
+                            <li><a class="dropdown-item" asp-controller="Product" asp-action="Popular">Popular Items</a></li>
+                            <li><a class="dropdown-item" asp-controller="Product" asp-action="New">New Arrivals</a></li>
                         </ul>
                     </li>
 

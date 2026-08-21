@@ -23,10 +23,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-
-
-
-
         // ApplicationUser -> SellerRequest
         builder.Entity<SellerRequest>()
             .HasOne(sr => sr.User)

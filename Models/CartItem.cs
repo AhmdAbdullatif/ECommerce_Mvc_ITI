@@ -22,7 +22,7 @@ public class CartItem
 
     public void AddQuantity(int quantity)
     {
-        if (quantity < 0 || quantity > int.MaxValue)
+        if (quantity < 0)
         {
             throw new ArgumentOutOfRangeException(nameof(quantity));
         }
