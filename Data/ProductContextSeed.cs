@@ -1,31 +1,55 @@
+using ECommerce_Mvc.Constants;
 using ECommerce_Mvc.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce_Mvc.Data;
 
 public class ProductContextSeed
 {
-    public static async Task SeedAsync(string sellerId,
-        AppDbContext context,
+    public static async Task SeedAsync(AppDbContext context,
+        UserManager<ApplicationUser> userManager,
         ILogger logger,
         int retry = 0)
     {
         int retryForAvailability = retry;
+        string sellerId;
         try
         {
-            var categories = PreconfiguredProductCategories();
+            List<Category> categories;
             if (!await context.Categories.AnyAsync())
             {
+                categories = PreconfiguredProductCategories().ToList();
                 await context.Categories.AddRangeAsync(categories);
+                await context.SaveChangesAsync();
+            }
+            else
+            {
+                categories = await context.Categories.ToListAsync();
+            }
+
+            var sellerEmail = "seller@example.com";
+            var seller = await userManager.FindByEmailAsync(sellerEmail);
+            if (seller is null)
+            {
+                seller = new ApplicationUser()
+                {
+                    Email = sellerEmail,
+                    UserName = sellerEmail
+                };
+
+                await userManager.CreateAsync(seller, AuthorizationConstants.DEFAULT_PASSWORD);
+                await userManager.AddToRoleAsync(seller, AuthorizationConstants.SELLERS);
+            }
+            sellerId = seller.Id;
+
+            if (!await context.Products.AnyAsync())
+            {
+                var products = PreconfiguredProducts(sellerId, categories);
+                await context.Products.AddRangeAsync(products);
             }
 
             await context.SaveChangesAsync();
-
-            var products = PreconfiguredProducts(sellerId, categories);
-            if (!await context.Products.AnyAsync())
-            {
-                await context.Products.AddRangeAsync(products);
-            }
         }
         catch (Exception ex)
         {
@@ -34,11 +58,8 @@ public class ProductContextSeed
             retryForAvailability++;
 
             logger.LogError(ex.Message);
-            await SeedAsync(sellerId, context, logger, retryForAvailability);
-            throw;
+            await SeedAsync(context, userManager, logger, retryForAvailability);
         }
-
-        await context.SaveChangesAsync();
     }
 
     private static IEnumerable<Category> PreconfiguredProductCategories()
@@ -58,14 +79,12 @@ public class ProductContextSeed
     {
         var categoryList = categories.ToList();
 
-        // Helper lookups (assumes the lists above are used)
         var shoes = categoryList.First(c => c.Name == "Shoes").Id;
         var clothing = categoryList.First(c => c.Name == "Clothing").Id;
         var accessories = categoryList.First(c => c.Name == "Accessories").Id;
         var electronics = categoryList.First(c => c.Name == "Electronics").Id;
         var homeGarden = categoryList.First(c => c.Name == "Home & Garden").Id;
 
-        // https://images.unsplash.com/photo-1771848194108-b86156b6ca72?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
         return
         [
             new Product(shoes, "Air Max 90",
@@ -86,7 +105,6 @@ public class ProductContextSeed
                 "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800",
                 sellerId),
 
-            // Clothing
             new Product(clothing, "Dri-FIT T-Shirt",
                 "Moisture-wicking training shirt",
                 100, 34.99m,
@@ -99,14 +117,12 @@ public class ProductContextSeed
                 "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800",
                 sellerId),
 
-            // Accessories
             new Product(accessories, "Sports Cap",
                 "Adjustable sports cap",
                 120, 24.99m,
                 "https://images.unsplash.com/photo-1588850561407-ed78c456fe18?w=800",
                 sellerId),
 
-            // Electronics
             new Product(electronics, "iPhone 15",
                 "Latest smartphone with advanced camera system",
                 30, 999.00m,
@@ -119,7 +135,6 @@ public class ProductContextSeed
                 "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800",
                 sellerId),
 
-            // Home & Garden
             new Product(homeGarden, "Billy Bookcase",
                 "Classic bookshelf unit",
                 15, 79.00m,
