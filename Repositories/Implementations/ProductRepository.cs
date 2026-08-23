@@ -66,7 +66,7 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Category)
             .FirstOrDefaultAsync(
                 p => p.Id == id &&
-                     p.UserId == userId);
+                     p.SellerId == userId);
     }
 
     public async Task AddAsync(Product product)
@@ -88,7 +88,7 @@ public class ProductRepository : IProductRepository
             await _context.Products
                 .Where(p =>
                     p.Id == id &&
-                    p.UserId == userId)
+                    p.SellerId == userId)
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(
                         p => p.CategoryId,

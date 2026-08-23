@@ -40,10 +40,10 @@ public class DashboardService : IDashboardService
     public async Task<SellerDashboardVM> GetSellerDashboardAsync(string sellerId)
     {
         var productsCount = await _context.Products
-            .CountAsync(p => p.UserId == sellerId);
+            .CountAsync(p => p.SellerId == sellerId);
 
         var sellerProductIds = await _context.Products
-            .Where(p => p.UserId == sellerId)
+            .Where(p => p.SellerId == sellerId)
             .Select(p => p.Id)
             .ToListAsync();
 

@@ -33,7 +33,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
         // ApplicationUser -> Product
         builder.Entity<Product>()
-            .HasOne(p => p.User)
+            .HasOne(p => p.Seller)
             .WithMany()
             .HasForeignKey(p => p.SellerId)
             .OnDelete(DeleteBehavior.Restrict);

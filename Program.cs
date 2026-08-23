@@ -26,21 +26,20 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
-// Identity
 
 
 builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddControllersWithViews();
 
-// Repository Dependency Injection
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-// Service Dependency Injection
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
+
+
 
 await app.SeedDatabaseAsync();
 
@@ -57,30 +56,10 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
 app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager =
-        scope.ServiceProvider
-            .GetRequiredService<RoleManager<IdentityRole>>();
-
-    await IdentitySeeder.SeedRolesAsync(roleManager);
-}
-
 app.Run();
-
-app.Run();
-

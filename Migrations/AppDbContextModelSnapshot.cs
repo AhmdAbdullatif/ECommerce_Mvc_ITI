@@ -241,10 +241,6 @@ namespace ECommerce_Mvc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -252,21 +248,6 @@ namespace ECommerce_Mvc.Migrations
                     b.HasIndex("SellerId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            CreatedAtUtc = new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "High performance laptop",
-                            Name = "Laptop",
-                            PictureUri = "laptop.png",
-                            Price = 15000m,
-                            Quantity = 10,
-                            SellerId = "a6f76fb7-5b39-4ecb-9639-f3bba5117dd5",
-                            UserId = "a6f76fb7-5b39-4ecb-9639-f3bba5117dd5"
-                        });
                 });
 
             modelBuilder.Entity("ECommerce_Mvc.Models.Review", b =>
@@ -557,7 +538,7 @@ namespace ECommerce_Mvc.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("ECommerce_Mvc.Models.ApplicationUser", "User")
+                    b.HasOne("ECommerce_Mvc.Models.ApplicationUser", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -565,7 +546,7 @@ namespace ECommerce_Mvc.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("User");
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("ECommerce_Mvc.Models.Review", b =>

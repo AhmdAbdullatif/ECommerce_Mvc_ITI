@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce_Mvc.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260820141354_InitialCreate")]
+    [Migration("20260823211654_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -255,21 +255,6 @@ namespace ECommerce_Mvc.Migrations
                     b.HasIndex("SellerId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            CreatedAtUtc = new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "High performance laptop",
-                            Name = "Laptop",
-                            PictureUri = "laptop.png",
-                            Price = 15000m,
-                            Quantity = 10,
-                            SellerId = "a6f76fb7-5b39-4ecb-9639-f3bba5117dd5",
-                            UserId = "a6f76fb7-5b39-4ecb-9639-f3bba5117dd5"
-                        });
                 });
 
             modelBuilder.Entity("ECommerce_Mvc.Models.Review", b =>
