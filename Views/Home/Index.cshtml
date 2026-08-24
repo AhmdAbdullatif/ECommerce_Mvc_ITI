@@ -1,8 +1,247 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<ECommerce_Mvc.Models.Product>
+
+@using System.Security.Claims
+@using ECommerce_Mvc.Constants
+
+@{
+    ViewData["Title"] = "Home";
+    string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* Premium Dark Theme Styles */
+    .premium-wrapper {
+        background-color: #0B101E;
+        min-height: 100vh;
+        color: #E2E8F0;
+        padding: 2rem 0;
+    }
+
+    .surface-card {
+        background-color: #161D2F;
+        border: 1px solid #2A3449;
+        border-radius: 1rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+
+    .surface-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.5) !important;
+        border-color: #3A4760;
+    }
+
+    /* Form Controls */
+    .input-dark {
+        background-color: #1F293D !important;
+        border: 1px solid #2A3449 !important;
+        color: #F8FAFC !important;
+    }
+
+    .input-dark:focus {
+        border-color: #D4AF37 !important;
+        box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25) !important;
+    }
+
+    .input-dark::placeholder {
+        color: #64748B !important;
+    }
+
+    /* Typography & Colors */
+    .text-gold { color: #D4AF37 !important; }
+    .text-muted-dark { color: #94A3B8 !important; }
+
+    /* Buttons */
+    .btn-gold {
+        background-color: #D4AF37;
+        color: #0B101E;
+        font-weight: 600;
+        border: none;
+    }
+    .btn-gold:hover {
+        background-color: #B5952F;
+        color: #0B101E;
+    }
+
+    .btn-outline-gold {
+        border: 1px solid #D4AF37;
+        color: #D4AF37;
+        background: transparent;
+    }
+    .btn-outline-gold:hover {
+        background-color: #D4AF37;
+        color: #0B101E;
+    }
+
+    .btn-surface {
+        background-color: #1F293D;
+        color: #E2E8F0;
+        border: 1px solid #2A3449;
+    }
+    .btn-surface:hover {
+        background-color: #2A3449;
+        color: #F8FAFC;
+    }
+
+    /* Image & Badges */
+    .product-img-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .product-img {
+        height: 260px;
+        width: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .surface-card:hover .product-img {
+        transform: scale(1.08);
+    }
+
+    .category-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background-color: rgba(11, 16, 30, 0.85);
+        border: 1px solid #D4AF37;
+        color: #D4AF37;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        backdrop-filter: blur(4px);
+    }
+
+    .text-line-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+
+<div class="premium-wrapper">
+    <div class="container">
+
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-bold mb-0 text-white">Our Collection</h2>
+            @if (User.IsInRole(AuthorizationConstants.SELLERS))
+            {
+                <!-- تحديد Product Controller -->
+                <a asp-controller="Product" asp-action="Create" class="btn btn-gold rounded-pill px-4 py-2 shadow-sm">
+                    + Add New Product
+                </a>
+            }
+        </div>
+
+        <!-- Filter & Search Section -->
+        <div class="surface-card p-4 mb-5">
+            <form asp-controller="Home" asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-lg-4 col-md-6">
+                    <label class="form-label text-muted-dark small fw-bold">Search</label>
+                    <input type="text" name="searchText" value="@ViewBag.SearchText" class="form-control form-control-lg input-dark" placeholder="Product name..." />
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label text-muted-dark small fw-bold">Category</label>
+                    <select name="categoryId" asp-items="ViewBag.Categories" class="form-select form-select-lg input-dark">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label text-muted-dark small fw-bold">Sort</label>
+                    <select name="sortOrder" class="form-select form-select-lg input-dark">
+                        <option value="">Default Sorting</option>
+                        <option value="price_asc" selected="@(ViewBag.SortOrder == "price_asc")">Price: Low to High</option>
+                        <option value="price_desc" selected="@(ViewBag.SortOrder == "price_desc")">Price: High to Low</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2 col-md-6 d-flex gap-2">
+                    <button type="submit" class="btn btn-gold btn-lg w-100 rounded-3">Search</button>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-surface btn-lg rounded-3" title="Reset Filters">
+                        &#x21bb;
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Products Grid -->
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <h4 class="text-muted-dark fw-light">No products found matching your criteria.</h4>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var product in Model)
+                {
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="surface-card h-100 d-flex flex-column">
+
+                            <!-- Image & Badge -->
+                            <div class="product-img-wrapper">
+                                @if (!string.IsNullOrWhiteSpace(product.PictureUri))
+                                {
+                                    <img src="@product.PictureUri" class="product-img" alt="@product.Name" />
+                                }
+                                else
+                                {
+                                    <div class="product-img d-flex align-items-center justify-content-center bg-dark text-muted-dark">
+                                        No Image
+                                    </div>
+                                }
+                                <span class="category-badge">
+                                    @(product.Category?.Name ?? "General")
+                                </span>
+                            </div>
+
+                            <!-- Card Body -->
+                            <div class="card-body p-4 d-flex flex-column flex-grow-1">
+                                <h5 class="card-title fw-bold text-white mb-2">@product.Name</h5>
+                                <p class="card-text text-muted-dark small text-line-clamp mb-4">
+                                    @product.Description
+                                </p>
+
+                                <div class="mt-auto d-flex justify-content-between align-items-center border-top border-secondary pt-3">
+                                    <span class="h5 fw-bolder text-gold mb-0">$@product.Price.ToString("0.00")</span>
+                                    <span class="text-muted-dark small px-2 py-1 rounded" style="background-color: #1F293D;">Qty: @product.Quantity</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Actions -->
+                            <div class="card-footer bg-transparent border-0 p-4 pt-0 d-flex gap-2">
+                                <!-- تحديد Product Controller -->
+                                <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-gold btn-sm flex-grow-1 rounded-pill">
+                                    View Details
+                                </a>
+
+                                @if (User.IsInRole(AuthorizationConstants.SELLERS) && currentUserId == product.UserId)
+                                {
+                                    <!-- تحديد Product Controller -->
+                                    <a asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-surface btn-sm rounded-circle px-2 d-flex align-items-center justify-content-center" title="Edit">
+                                        &#x270E;
+                                    </a>
+                                    <!-- تحديد Product Controller -->
+                                    <form asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" method="post" class="m-0">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-surface text-danger btn-sm rounded-circle px-2 d-flex align-items-center justify-content-center" onclick="return confirm('Delete this product?')" title="Delete">
+                                            &#x1F5D1;
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
 </div>
+
