@@ -17,6 +17,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<CartItem> CartItems => Set<CartItem>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<Review> Reviews => Set<Review>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -30,7 +31,11 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(sr => sr.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-      
+        // ApplicationUser -> Product
+        builder.Entity<Product>()
+            .HasOne(p => p.Seller)
+            .WithMany()
+            .HasForeignKey(p => p.SellerId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
-
 }

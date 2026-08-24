@@ -5,8 +5,10 @@ using ECommerce_Mvc.Repositories.Interfaces;
 using ECommerce_Mvc.Repositories.Implementations;
 using ECommerce_Mvc.Services.Interfaces;
 using ECommerce_Mvc.Services.Implementations;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +24,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
-// Identity
 
 
 builder.Services.AddScoped<ISellerService, SellerService>();
@@ -32,8 +33,6 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-
-builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -46,6 +45,8 @@ builder.Services.AddScoped<IAnonymousCartManager, AnonymousCartManager>();
 
 var app = builder.Build();
 
+
+
 await app.SeedDatabaseAsync();
 
 if (!app.Environment.IsDevelopment())
@@ -56,13 +57,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.MapControllerRoute(
     name: "default",

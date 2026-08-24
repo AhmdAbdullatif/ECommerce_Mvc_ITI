@@ -1,0 +1,28 @@
+﻿@model ECommerce_Mvc.ViewModels.SellerDashboardVM
+
+<h1>Seller Dashboard</h1>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>My Products</h5>
+            <h2>@Model.ProductsCount</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>My Orders</h5>
+            <h2>@Model.OrdersCount</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>My Sales</h5>
+            <h2>@Model.Sales EGP</h2>
+        </div>
+    </div>
+
+</div>
