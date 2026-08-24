@@ -1,8 +1,6 @@
 using ECommerce_Mvc.Data;
 using ECommerce_Mvc.Extensions;
 using ECommerce_Mvc.Models;
-using ECommerce_Mvc.Services.Implementation;
-using ECommerce_Mvc.Services.Interface;
 using ECommerce_Mvc.Repositories.Interfaces;
 using ECommerce_Mvc.Repositories.Implementations;
 using ECommerce_Mvc.Services.Interfaces;
