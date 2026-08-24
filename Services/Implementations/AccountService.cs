@@ -23,30 +23,15 @@ namespace ECommerce_Mvc.Services.Implementations
         {
             var user = new ApplicationUser
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
                 Email = model.Email,
                 UserName = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                // 1. إضافة الصلاحية وحفظ النتيجة في متغير (يفضل أن يكون Customer للمسجلين الجدد)
-                var roleResult = await _userManager.AddToRoleAsync(user, AuthorizationConstants.ADMINISTRATORS);
-
-                // 2. التحقق من نجاح إضافة الصلاحية
-                if (!roleResult.Succeeded)
-                {
-                    // إذا فشلت (بسبب عدم وجود الصلاحية في الداتابيز مثلاً)، نرجع الخطأ للكنترولر
-                    return roleResult;
-                }
-
-                // 3. تسجيل الدخول فقط بعد التأكد من أخذ الصلاحية
                 await _signInManager.SignInAsync(user, isPersistent: false);
             }
 
@@ -57,8 +42,7 @@ namespace ECommerce_Mvc.Services.Implementations
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            // التحقق من وجود المستخدم وكونه نشط (Active)
-            if (user == null || !user.IsActive)
+            if (user == null)
             {
                 return (SignInResult.Failed, "Invalid email or password.");
             }

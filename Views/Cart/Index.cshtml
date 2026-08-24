@@ -1,0 +1,106 @@
+@using ECommerce_Mvc.ViewModels
+@model CartViewModel
+
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-3">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-0 fw-bold">
+                    <i class="bi bi-cart-fill me-2"></i> Your Shopping Cart
+                </h4>
+            </div>
+
+            <div class="card-body">
+                
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <a href="/Home/Index" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-arrow-left-circle me-2"></i> Continue Shopping
+                        </a>
+                    </div>
+                </div>
+
+                
+                @foreach (var item in Model.CartItems)
+                {
+                    var isAbsoluteImageUrl = Uri.TryCreate(item.PictureUri, UriKind.Absolute, out var imageUri)
+                                             && (imageUri.Scheme == Uri.UriSchemeHttp || imageUri.Scheme == Uri.UriSchemeHttps);
+                    var imageSource = isAbsoluteImageUrl || item.PictureUri.StartsWith('/')
+                        ? item.PictureUri
+                        : Url.Content($"~/images/{item.PictureUri}");
+
+                    <div class="row border-bottom pb-3 mb-3 align-items-center">
+                        
+                        <div class="col-12 col-lg-2 text-center">
+                            <img src="@imageSource" class="img-fluid rounded shadow-sm"
+                                 alt="@item.ProductName" style="max-height:100px;" />
+                        </div>
+
+                        
+                        <div class="col-12 col-lg-5">
+                            <h5 class="text-dark fw-bold">@item.ProductName</h5>
+                            <p class="text-muted mb-1">@item.ProductDescription</p>
+                            <span class="badge bg-secondary">Price: $@item.UnitPrice</span>
+                        </div>
+
+                        
+                        <div class="col-12 col-lg-3">
+                            <form asp-controller="Cart"
+                                  asp-action="UpdateItemQuantity"
+                                  method="post"
+                                  class="d-flex flex-column gap-1">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="ProductId" value="@item.ProductId" />
+                                <label for="quantity-@item.ProductId" class="form-label mb-0">Update quantity</label>
+                                <div class="input-group">
+                                    <input id="quantity-@item.ProductId"
+                                           name="Quantity"
+                                           type="number"
+                                           value="@item.Quantity"
+                                           min="1"
+                                           step="1"
+                                           required
+                                           class="form-control"
+                                           aria-label="Updated quantity for @item.ProductName" />
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-check-lg me-1"></i> Update
+                                    </button>
+                                </div>
+                                <small class="text-muted">Current quantity: @item.Quantity</small>
+                                @if (TempData["UpdateError"] != null)
+                                {
+                                    <small class="text-danger">@TempData["UpdateError"]</small>
+                                }
+                            </form>
+                        </div>
+
+                        
+                        <div class="col-12 col-lg-2 text-center">
+                            <form asp-controller="Cart" asp-action="DeleteItem" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash-fill"></i> Remove
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="card-footer bg-light border-0">
+                <div class="row">
+                    <div class="col-md-6 offset-md-6">
+                        <ul class="list-group shadow-sm">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <h5 class="fw-bold text-dark text-uppercase mb-0">Total</h5>
+                                <h4 class="fw-bolder text-success mb-0">$@Model.TotalPrice</h4>
+                            </li>
+                        </ul>
+                        <a href="/Order/CreateOrder" class="btn btn-primary w-100 mt-4 py-2 fs-5 fw-bold">
+                            <i class="bi bi-credit-card-2-back me-2"></i> Create Order
+                        </a>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
