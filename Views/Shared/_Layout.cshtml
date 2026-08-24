@@ -142,7 +142,11 @@
                     @if (User.IsInRole("Administrators"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link fw-semibold" href="/Dashboard">Dashboard</a>
+                            <a class="nav-link active fw-semibold"
+                                   asp-controller="Admin"
+                                   asp-action="Dashboard">
+                                Dashboard
+                            </a>
                         </li>
                     }
                 </ul>

@@ -1,0 +1,33 @@
+﻿@model ECommerce_Mvc.Models.AdminDashboardVM
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div style="background:#0f1729; border-radius:12px; padding:24px; font-family:sans-serif;">
+
+    <h4 style="color:#f0f2f7; margin-bottom:16px;">Overview</h4>
+
+    <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; margin-bottom:24px;">
+        <div style="background:#151f38; border-radius:10px; padding:14px;">
+            <p style="color:#8b93a8; font-size:12px; margin:0 0 6px;">Total customers</p>
+            <h3 style="color:#f0f2f7; margin:0;">@Model.TotalCustomers</h3>
+        </div>
+        <div style="background:#151f38; border-radius:10px; padding:14px;">
+            <p style="color:#8b93a8; font-size:12px; margin:0 0 6px;">Total sellers</p>
+            <h3 style="color:#f0f2f7; margin:0;">@Model.TotalSellers</h3>
+        </div>
+        <div style="background:#151f38; border-radius:10px; padding:14px;">
+            <p style="color:#8b93a8; font-size:12px; margin:0 0 6px;">Total products</p>
+            <h3 style="color:#f0f2f7; margin:0;">@Model.TotalProducts</h3>
+        </div>
+        <div style="background:#151f38; border-radius:10px; padding:14px;">
+            <p style="color:#8b93a8; font-size:12px; margin:0 0 6px;">Total orders</p>
+            <h3 style="color:#f0f2f7; margin:0;">@Model.TotalOrders</h3>
+        </div>
+        <div style="background:#2b2408; border-radius:10px; padding:14px; border:1px solid #e6b930;">
+            <p style="color:#e6b930; font-size:12px; margin:0 0 6px;">Pending orders</p>
+            <h3 style="color:#f5d97a; margin:0;">@Model.PendingOrders</h3>
+        </div>
+    </div>
+
+</div>
