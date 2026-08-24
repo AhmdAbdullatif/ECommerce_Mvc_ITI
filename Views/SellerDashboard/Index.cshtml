@@ -1,0 +1,110 @@
+﻿@model ECommerce_Mvc.Models.SellerDashboardViewModel
+
+@{
+    ViewData["Title"] = "Seller Dashboard";
+}
+
+<style>
+    .dashboard-title {
+        color: var(--accent-gold);
+        font-weight: 700;
+    }
+
+    .dashboard-card {
+        background-color: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-gold);
+        }
+
+    .dashboard-icon {
+        color: var(--accent-gold);
+        font-size: 40px;
+    }
+
+    .dashboard-card-title {
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .dashboard-number {
+        color: var(--text-main);
+        font-size: 32px;
+        font-weight: 700;
+    }
+</style>
+
+<div class="container py-5">
+
+    <h2 class="dashboard-title mb-5">
+        Seller Dashboard
+    </h2>
+
+    <div class="row g-4">
+
+        <!-- Their Products -->
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="card-body text-center p-4">
+
+                    <i class="bi bi-box-seam dashboard-icon"></i>
+
+                    <h5 class="dashboard-card-title mt-3">
+                        Their Products
+                    </h5>
+
+                    <div class="dashboard-number mt-2">
+                        @Model.ProductsCount
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Their Orders -->
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="card-body text-center p-4">
+
+                    <i class="bi bi-cart-check dashboard-icon"></i>
+
+                    <h5 class="dashboard-card-title mt-3">
+                        Their Orders
+                    </h5>
+
+                    <div class="dashboard-number mt-2">
+                        @Model.OrdersCount
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Their Sales -->
+        <div class="col-md-4">
+            <div class="dashboard-card h-100">
+                <div class="card-body text-center p-4">
+
+                    <i class="bi bi-currency-dollar dashboard-icon"></i>
+
+                    <h5 class="dashboard-card-title mt-3">
+                        Their Sales
+                    </h5>
+
+                    <div class="dashboard-number mt-2">
+                        @Model.Sales.ToString("0.00")
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
