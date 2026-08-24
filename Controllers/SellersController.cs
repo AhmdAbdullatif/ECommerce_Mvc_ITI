@@ -10,29 +10,29 @@ namespace ECommerce_Mvc.Controllers
     namespace ECommerce_Mvc.Controllers
     {
         [Authorize] // تأكد من أن أي شخص يدخل هنا مسجل دخوله على الأقل
-        public class SellerController : Controller
-        {
-            private readonly ISellerService _sellerService;
+    public class SellerController : Controller
+    {
+        private readonly ISellerService _sellerService;
             private readonly UserManager<ApplicationUser> _userManager;
 
-            public SellerController(
+        public SellerController(
                 ISellerService sellerService,
                 UserManager<ApplicationUser> userManager)
-            {
-                _sellerService = sellerService;
+        {
+            _sellerService = sellerService;
                 _userManager = userManager;
-            }
+        }
 
             // ==========================================
             // 1. صلاحيات البائع (Seller)
             // ==========================================
             [Authorize(Roles = "Seller")]
             [HttpGet]
-            public IActionResult Index()
-            {
+        public IActionResult Index()
+        {
                 // لوحة تحكم البائع: تعرض إحصائياته أو منتجاته
-                return View();
-            }
+            return View();
+        }
 
 
             // ==========================================
