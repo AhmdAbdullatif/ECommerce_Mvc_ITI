@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ECommerce_Mvc.View_Model
+namespace ECommerce_Mvc.ViewModels
 {
     public class RegisterViewModel
     {
@@ -26,5 +26,7 @@ namespace ECommerce_Mvc.View_Model
         [Compare("Password")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+        public bool IsSeller { get; set; }
     }
 }

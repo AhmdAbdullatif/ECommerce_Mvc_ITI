@@ -4,59 +4,180 @@
     ViewData["Title"] = "Product Details";
 }
 
-<div class="container mt-4">
+<style>
+    /* تنسيقات صفحة التفاصيل */
+    .details-wrapper {
+        background-color: var(--bg-surface, #161D2F);
+        border: 1px solid var(--border-color, #2A3449);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
 
-    <h2 class="mb-4">Product Details</h2>
+    .img-container {
+        background-color: #0d1326; /* لون أغمق قليلاً للصورة لإبرازها */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        height: 100%;
+        min-height: 400px;
+    }
 
-    <div class="card shadow-sm">
+    .details-img {
+        max-height: 500px;
+        width: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
+        transition: transform 0.4s ease;
+    }
 
-        @if (!string.IsNullOrWhiteSpace(Model.PictureUri))
-        {
-            <img src="@Model.PictureUri"
-                 class="card-img-top"
-                 style="max-height: 400px; object-fit: contain;"
-                 alt="@Model.Name" />
+        .details-img:hover {
+            transform: scale(1.05);
         }
 
-        <div class="card-body">
+    .details-content {
+        padding: 3rem;
+    }
 
-            <h3 class="card-title">
-                @Model.Name
-            </h3>
+    .info-pill {
+        background-color: rgba(212, 175, 55, 0.1); /* خلفية ذهبية شفافة */
+        color: var(--accent-gold, #D4AF37);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-radius: 50px;
+        padding: 0.4rem 1.2rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: inline-block;
+    }
 
-            <p class="card-text">
-                @Model.Description
-            </p>
+    .price-tag {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--accent-gold, #D4AF37);
+        line-height: 1;
+    }
 
-            <hr />
+    .spec-label {
+        color: var(--text-muted, #94A3B8);
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-            <p>
-                <strong>Price:</strong>
-                @Model.Price.ToString("0.00")
-            </p>
+    .spec-value {
+        color: var(--text-main, #E2E8F0);
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+</style>
 
-            <p>
-                <strong>Quantity:</strong>
-                @Model.Quantity
-            </p>
+<div class="container py-5">
 
-            <p>
-                <strong>Category:</strong>
-                @(Model.Category?.Name ?? "N/A")
-            </p>
-
-            <p>
-                <strong>Created At:</strong>
-                @Model.CreatedAtUtc.ToString("dd/MM/yyyy")
-            </p>
-
-            <a asp-action="Index"
-               class="btn btn-secondary">
-                Back to Products
-            </a>
-
-        </div>
-
+    <!-- Header & Back Button -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0 text-white">Product Details</h2>
+        <a asp-action="Index" class="btn btn-outline-gold rounded-pill px-4 py-2 fw-semibold">
+            &larr; Back to Products
+        </a>
     </div>
 
+    <!-- Details Card -->
+    <div class="details-wrapper">
+        <div class="row g-0">
+
+            <!-- Left Column: Image -->
+            <div class="col-lg-6 border-end border-secondary border-opacity-25">
+                <div class="img-container">
+                    @if (!string.IsNullOrWhiteSpace(Model.PictureUri))
+                    {
+                        <img src="~/images/@Model.PictureUri" class="details-img" alt="@Model.Name" />
+                    }
+                    else
+                    {
+                        <div class="text-muted d-flex flex-column align-items-center justify-content-center h-100">
+                            <!-- أيقونة بديلة في حالة عدم وجود صورة -->
+                            <span style="font-size: 4rem;">&#x1F4F7;</span>
+                            <span class="mt-2">No Image Available</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Right Column: Product Info -->
+            <div class="col-lg-6">
+                <div class="details-content d-flex flex-column h-100">
+
+                    <!-- Category Pill -->
+                    <div class="mb-3">
+                        <span class="info-pill mb-2">
+                            @(Model.Category?.Name ?? "Uncategorized")
+                        </span>
+                    </div>
+
+                    <!-- Title & Description -->
+                    <h1 class="fw-bolder text-white mb-3">@Model.Name</h1>
+
+                    <p class="text-muted lh-lg mb-4" style="font-size: 1.05rem;">
+                        @Model.Description
+                    </p>
+
+                    <!-- Price -->
+                    <div class="mb-4">
+                        <span class="price-tag">$@Model.Price.ToString("0.00")</span>
+                    </div>
+
+                    <hr class="border-secondary opacity-25 my-4" />
+
+                    <!-- Specifications Grid -->
+                    <div class="row g-4 mb-5">
+                        <div class="col-6">
+                            <div class="spec-label mb-1">Availability</div>
+                            <div class="spec-value">
+                                @if (Model.Quantity > 0)
+                                {
+                                    <span class="text-success fw-bold">
+                                        &#x2714; In Stock (@Model.Quantity)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger fw-bold">
+                                        &#x2718; Out of Stock
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="spec-label mb-1">Added On</div>
+                            <div class="spec-value">@Model.CreatedAtUtc.ToString("dd MMM yyyy")</div>
+                        </div>
+                    </div>
+
+                    <!-- Add to Cart Action -->
+                    <div class="mt-auto">
+                        <form asp-controller="Cart" asp-action="AddItem" method="post" class="d-flex gap-2">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="ProductId" value="@Model.Id" />
+
+                            <div class="flex-grow-1">
+                                <input type="number" name="Quantity" value="1" min="1" class="form-control" style="max-width:140px;" />
+                            </div>
+
+                            <div style="width:100%">
+                                <button type="submit" class="btn btn-gold btn-lg w-100 rounded-pill fw-bold shadow" 
+                                        @(Model.Quantity <= 0 ? "disabled" : "")>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>

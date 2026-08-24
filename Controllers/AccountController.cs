@@ -1,5 +1,6 @@
 ﻿using ECommerce_Mvc.Models;
-using ECommerce_Mvc.View_Model;
+using ECommerce_Mvc.Services.Interfaces;
+using ECommerce_Mvc.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,15 +10,17 @@ namespace ECommerce_Mvc.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        private readonly SignInManager<ApplicationUser>
-            _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IAnonymousCartManager _anonymousCartManager;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IAnonymousCartManager anonymousCartManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _anonymousCartManager = anonymousCartManager;
         }
 
         // GET: /Account/Register
@@ -38,13 +41,9 @@ namespace ECommerce_Mvc.Controllers
 
             var user = new ApplicationUser
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
                 Email = model.Email,
                 UserName = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
             };
 
             var result = await _userManager.CreateAsync(
@@ -60,6 +59,8 @@ namespace ECommerce_Mvc.Controllers
                 await _signInManager.SignInAsync(
                     user,
                     isPersistent: false);
+                
+                await _anonymousCartManager.TransferAnonymousCartToUserAsync(HttpContext, user.Email);
 
                 return RedirectToAction(
                     "Index",
@@ -99,7 +100,7 @@ namespace ECommerce_Mvc.Controllers
             var user = await _userManager.FindByEmailAsync(
                 model.Email);
 
-            if (user == null || !user.IsActive)
+            if (user == null)
             {
                 ModelState.AddModelError(
                     string.Empty,
@@ -122,6 +123,8 @@ namespace ECommerce_Mvc.Controllers
                 {
                     return Redirect(returnUrl);
                 }
+                
+                await _anonymousCartManager.TransferAnonymousCartToUserAsync(HttpContext, user.Email);
 
                 return RedirectToAction(
                     "Index",

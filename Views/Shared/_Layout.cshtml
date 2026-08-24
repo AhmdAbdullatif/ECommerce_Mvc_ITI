@@ -1,6 +1,4 @@
-﻿@using ECommerce_Mvc.Constants
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,7 +9,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ECommerce_Mvc.styles.css" asp-append-version="true" />
 </head>
-
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -90,10 +87,8 @@
             @RenderBody()
         </main>
 
-    </div>
-
-    <footer class="border-top footer text-muted">
-
+    <!-- Footer (Dark Theme) -->
+    <footer class="py-4 footer-premium">
         <div class="container">
             &copy; 2026 - ECommerce_Mvc -
             <a asp-area=""
@@ -102,14 +97,11 @@
                 Privacy
             </a>
         </div>
-
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

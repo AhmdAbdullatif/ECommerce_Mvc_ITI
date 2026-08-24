@@ -34,26 +34,12 @@ namespace ECommerce_Mvc.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -239,13 +225,17 @@ namespace ECommerce_Mvc.Migrations
 
                     b.Property<string>("SellerId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("SellerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
                 });
@@ -540,8 +530,8 @@ namespace ECommerce_Mvc.Migrations
 
                     b.HasOne("ECommerce_Mvc.Models.ApplicationUser", "Seller")
                         .WithMany()
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");

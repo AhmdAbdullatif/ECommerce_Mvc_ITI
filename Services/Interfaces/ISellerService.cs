@@ -1,6 +1,6 @@
 ﻿using ECommerce_Mvc.Models;
 
-namespace ECommerce_Mvc.Services.Interface
+namespace ECommerce_Mvc.Services.Interfaces
 {
     public interface ISellerService
     {

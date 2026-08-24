@@ -20,4 +20,24 @@ public class CartItem
         UnitPrice = unitPrice;
     }
 
+    public void AddQuantity(int quantity)
+    {
+        if (quantity < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        Quantity += quantity;
+    }
+
+    public void UpdateQuantity(int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        Quantity = quantity;
+    }
+
 }

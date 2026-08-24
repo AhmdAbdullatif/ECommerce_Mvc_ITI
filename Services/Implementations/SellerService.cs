@@ -1,11 +1,10 @@
 ﻿using ECommerce_Mvc.Data;
 using ECommerce_Mvc.Enums;
 using ECommerce_Mvc.Models;
-using ECommerce_Mvc.Services.Interface;
+using ECommerce_Mvc.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-namespace ECommerce_Mvc.Services.Implementation
+namespace ECommerce_Mvc.Services.Implementations
 {
     public class SellerService : ISellerService
     {

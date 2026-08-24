@@ -32,10 +32,18 @@ builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
+
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+
+builder.Services.AddScoped<ICartService, CartService>();
+
+builder.Services.AddScoped<IAnonymousCartManager, AnonymousCartManager>();
+
 
 var app = builder.Build();
 
