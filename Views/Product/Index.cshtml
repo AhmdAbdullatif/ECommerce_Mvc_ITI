@@ -229,39 +229,23 @@
                                     View Details
                                 </a>
 
-                            @if (User.IsInRole(AuthorizationConstants.SELLERS)
-                                && currentUserId == product.SellerId)
-                            {
-                                <a asp-action="Edit"
-                                   asp-route-id="@product.Id"
-                                   class="btn btn-warning btn-sm">
-                                    Edit
-                                </a>
-
-                                <form asp-action="Delete"
-                                      asp-route-id="@product.Id"
-                                      method="post"
-                                      class="d-inline">
-
-                                    @Html.AntiForgeryToken()
-
-                                    <button type="submit"
-                                            class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Are you sure you want to delete this product?')">
-                                        Delete
-                                    </button>
-
-                                </form>
-                            }
-
+                                @if (User.IsInRole(AuthorizationConstants.SELLERS) && currentUserId == product.UserId)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-surface btn-sm rounded-circle px-2 d-flex align-items-center justify-content-center" title="Edit">
+                                        &#x270E;
+                                    </a>
+                                    <form asp-action="Delete" asp-route-id="@product.Id" method="post" class="m-0">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-surface text-danger btn-sm rounded-circle px-2 d-flex align-items-center justify-content-center" onclick="return confirm('Delete this product?')" title="Delete">
+                                            &#x1F5D1;
+                                        </button>
+                                    </form>
+                                }
+                            </div>
                         </div>
-
                     </div>
-
-                </div>
-            }
-
-        </div>
-    }
-
+                }
+            </div>
+        }
+    </div>
 </div>

@@ -3,104 +3,204 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ECommerce_Mvc</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - E_Commerce</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ECommerce_Mvc.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/E_Commerce.styles.css" asp-append-version="true" />
+
+    <style>
+            /* تعريف الألوان الأساسية للموقع بالكامل (Premium Dark Theme) */
+            :root {
+                --bg-main: #0B101E; /* خلفية الموقع */
+                --bg-surface: #161D2F; /* خلفية النافبار والفوتر */
+                --border-color: #2A3449; /* لون الحدود */
+                --text-main: #E2E8F0; /* لون النصوص الأساسية */
+                --text-muted: #94A3B8; /* لون النصوص الفرعية */
+                --accent-gold: #D4AF37; /* اللون الذهبي */
+                --accent-gold-hover: #B5952F;
+            }
+
+            body {
+                background-color: var(--bg-main);
+                color: var(--text-main);
+            }
+
+            /* Navbar Premium Styles */
+            .navbar-premium {
+                background-color: var(--bg-surface) !important;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            }
+
+            .text-gold {
+                color: var(--accent-gold) !important;
+            }
+
+            .navbar-nav .nav-link {
+                color: var(--text-main) !important;
+                transition: color 0.3s ease, transform 0.2s ease;
+            }
+
+                .navbar-nav .nav-link:hover,
+                .navbar-nav .nav-link:focus,
+                .navbar-nav .nav-link.active {
+                    color: var(--accent-gold) !important;
+                    transform: translateY(-2px);
+                }
+
+            /* Dropdown Dark Mode Override */
+            .dropdown-menu-dark {
+                background-color: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+
+                .dropdown-menu-dark .dropdown-item {
+                    color: var(--text-main);
+                    transition: all 0.2s;
+                }
+
+                    .dropdown-menu-dark .dropdown-item:hover {
+                        background-color: var(--border-color);
+                        color: var(--accent-gold);
+                    }
+
+            .dropdown-divider {
+                border-top-color: var(--border-color);
+            }
+
+            /* Buttons Premium Styles */
+            .btn-gold {
+                background-color: var(--accent-gold);
+                color: #0B101E;
+                font-weight: 600;
+                border: 1px solid var(--accent-gold);
+                transition: all 0.3s ease;
+            }
+
+                .btn-gold:hover {
+                    background-color: var(--accent-gold-hover);
+                    border-color: var(--accent-gold-hover);
+                    color: #0B101E;
+                }
+
+            .btn-outline-gold {
+                color: var(--accent-gold);
+                border: 1px solid var(--accent-gold);
+                background-color: transparent;
+                transition: all 0.3s ease;
+            }
+
+                .btn-outline-gold:hover {
+                    background-color: var(--accent-gold);
+                    color: #0B101E;
+                }
+
+            /* Footer */
+            footer.footer-premium {
+                background-color: var(--bg-surface);
+                border-top: 1px solid var(--border-color);
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                margin-top: 50px;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+            }
+
+                footer.footer-premium p {
+                    color: var(--text-muted) !important;
+                    font-size: 0.9rem;
+                    letter-spacing: 1px;
+                }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+    <!-- Navbar (Dark Theme) -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-premium sticky-top">
+        <div class="container px-4 px-lg-5">
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold text-gold" asp-controller="Home" asp-action="Index">E_Commerce</a>
 
-                <a class="navbar-brand"
-                   asp-area=""
-                   asp-controller="Home"
-                   asp-action="Index">
-                    ECommerce_Mvc
-                </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link active fw-semibold" asp-controller="Home" asp-action="Index">Home</a></li>
 
-                    <span class="navbar-toggler-icon"></span>
-
-                </button>
-
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-
-                    <ul class="navbar-nav flex-grow-1">
-
+                    @if (User.IsInRole("Administrators"))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Index">
-                                Home
-                            </a>
+                            <a class="nav-link fw-semibold" href="/Dashboard">Dashboard</a>
                         </li>
+                    }
+                </ul>
 
+                <!-- Cart + Login/Register OR Welcome + Logout -->
+                <ul class="navbar-nav d-flex align-items-center">
+                    <li class="nav-item me-3">
+                        <a class="btn btn-outline-gold rounded-pill px-3" asp-controller="Cart" asp-action="Index">
+                            <i class="bi-cart-fill me-1"></i>
+                            Cart
+                            <!-- Custom Badge color -->
+                            <span class="badge ms-1 rounded-pill" style="background-color: var(--accent-gold); color: #0B101E;">0</span>
+                        </a>
+                    </li>
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item me-2">
+                            <span class="nav-link fw-semibold text-gold">
+                                Welcome, @User.Identity.Name 👋
+                            </span>
+                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-controller="Product"
-                               asp-action="Index">
-                                Products
-                            </a>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                <!-- استخدمنا زر أحمر أنيق لتسجيل الخروج -->
+                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">Logout</button>
+                            </form>
                         </li>
-
-                        @if (User.IsInRole(AuthorizationConstants.ADMINISTRATORS))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Category"
-                                   asp-action="Index">
-                                    Categories
-                                </a>
-                            </li>
-                        }
-
+                    }
+                    else
+                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Privacy">
-                                Privacy
-                            </a>
+                            <a class="btn btn-outline-gold btn-sm rounded-pill me-2 px-4 py-2" asp-controller="Account" asp-action="Login">Login</a>
                         </li>
-
-                    </ul>
-
-                </div>
+                        <li class="nav-item">
+                            <a class="btn btn-gold btn-sm rounded-pill px-4 py-2" asp-controller="Account" asp-action="Register">Register</a>
+                        </li>
+                    }
+                </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
-    <div class="container">
-
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <!-- Main Body -->
+    <main class="container my-5">
+        @RenderBody()
+    </main>
 
     <!-- Footer (Dark Theme) -->
     <footer class="py-4 footer-premium">
         <div class="container">
-            &copy; 2026 - ECommerce_Mvc -
-            <a asp-area=""
-               asp-controller="Home"
-               asp-action="Privacy">
-                Privacy
-            </a>
+            <p class="m-0 text-center">© 2023 E_Commerce. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
