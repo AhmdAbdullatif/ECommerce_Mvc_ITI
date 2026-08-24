@@ -138,23 +138,11 @@
                 <!-- Links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item"><a class="nav-link active fw-semibold" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" asp-controller="Home" asp-action="About">About</a></li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-semibold" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                        <!-- Dark Dropdown Menu -->
-                        <ul class="dropdown-menu dropdown-menu-dark shadow" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">All Products</a></li>
-                            <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" asp-controller="Product" asp-action="Popular">Popular Items</a></li>
-                            <li><a class="dropdown-item" asp-controller="Product" asp-action="New">New Arrivals</a></li>
-                        </ul>
-                    </li>
-
-                    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                    @if (User.IsInRole("Administrators"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link fw-semibold" href="/Admin">ManagementSystem</a>
+                            <a class="nav-link fw-semibold" href="/Dashboard">Dashboard</a>
                         </li>
                     }
                 </ul>
