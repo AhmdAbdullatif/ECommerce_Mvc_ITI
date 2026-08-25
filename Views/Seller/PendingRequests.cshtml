@@ -1,0 +1,103 @@
+﻿@model IEnumerable<ECommerce_Mvc.Models.SellerRequest>
+
+@{
+    ViewData["Title"] = "طلبات البائعين المعلقة";
+}
+
+<div class="container py-5" dir="rtl">
+    
+    <!-- عرض رسائل النجاح أو الخطأ -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm rounded-3 mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-3 mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-dark mb-0">
+            <i class="bi bi-person-lines-fill text-primary me-2"></i> طلبات الانضمام المعلقة
+        </h3>
+        <span class="badge bg-primary fs-6 px-4 py-2 rounded-pill shadow-sm">
+            الطلبات: @Model.Count()
+        </span>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="py-3 px-4">رقم الطلب</th>
+                        <th class="py-3">بيانات المستخدم</th>
+                        <th class="py-3">تاريخ الطلب</th>
+                        <th class="py-3 text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox-fill fs-1 d-block mb-3 text-secondary opacity-50"></i>
+                                <h5 class="fw-bold">لا توجد طلبات معلقة</h5>
+                                <p class="mb-0">جميع طلبات البائعين تم مراجعتها.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var request in Model)
+                        {
+                            <tr>
+                                <td class="px-4 fw-bold text-muted">#@request.Id</td>
+                                <td>
+                                    <div class="d-flex align-items-center py-2">
+                                        <div class="bg-primary bg-opacity-10 p-2 rounded-circle me-3">
+                                            <i class="bi bi-person-circle text-primary fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">@request.User?.UserName</h6>
+                                            <small class="text-muted">@request.User?.Email</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-dark">@request.RequestedAt.ToString("yyyy-MM-dd")</span><br />
+                                    <small class="text-muted">@request.RequestedAt.ToString("hh:mm tt")</small>
+                                </td>
+                                <td class="px-4 text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <!-- زر الموافقة -->
+                                        <form asp-action="ApproveRequest" method="post">
+                                            <input type="hidden" name="id" value="@request.Id" />
+                                            <button type="submit" class="btn btn-success btn-sm rounded-3 shadow-sm px-3 py-2" onclick="return confirm('هل أنت متأكد من ترقية هذا المستخدم إلى بائع؟');">
+                                                <i class="bi bi-check-circle me-1"></i> موافقة
+                                            </button>
+                                        </form>
+
+                                        <!-- زر الرفض -->
+                                        <form asp-action="RejectRequest" method="post">
+                                            <input type="hidden" name="id" value="@request.Id" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-3 px-3 py-2" onclick="return confirm('هل أنت متأكد من رفض طلب هذا المستخدم؟');">
+                                                <i class="bi bi-x-circle me-1"></i> رفض
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

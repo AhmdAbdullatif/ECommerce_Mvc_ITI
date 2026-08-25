@@ -15,4 +15,10 @@ public class Address
         City = city;
         Street = street;
     }
+
+    public Address(string city, string street)
+    {
+        City = city;
+        Street = street;
+    }
 }

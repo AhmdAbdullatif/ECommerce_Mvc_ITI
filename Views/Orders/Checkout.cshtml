@@ -1,0 +1,55 @@
+﻿@model ECommerce_Mvc.ViewModels.CheckoutViewModel
+<div class="container py-5" dir="rtl">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0" style="border-radius: 1rem;">
+                <div class="card-body p-4 p-md-5 pt-2">
+                    <form asp-controller="Orders" asp-action="ProcessPayment" method="post">
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger text-center">
+                                @TempData["ErrorMessage"]
+                            </div>
+                        }
+
+                        <input type="hidden" asp-for="TotalAmount" />
+
+                        <!-- حقل الدولة (يمكن جعله مخفياً أو حقل إدخال) -->
+                        <input type="hidden" asp-for="Country" />
+
+                        <!-- حقل المحافظة / State -->
+                        <div class="form-floating mb-4">
+                            <input asp-for="State" class="form-control bg-light border-0 shadow-none" placeholder="المحافظة" style="border-radius: 0.75rem;" />
+                            <label asp-for="State" class="text-secondary">المحافظة / الولاية</label>
+                            <span asp-validation-for="State" class="text-danger small mt-2 d-block fw-semibold"></span>
+                        </div>
+
+                        <!-- حقل المدينة -->
+                        <div class="form-floating mb-4">
+                            <input asp-for="City" class="form-control bg-light border-0 shadow-none" placeholder="المدينة" style="border-radius: 0.75rem;" />
+                            <label asp-for="City" class="text-secondary">المدينة</label>
+                            <span asp-validation-for="City" class="text-danger small mt-2 d-block fw-semibold"></span>
+                        </div>
+
+                        <!-- حقل الشارع -->
+                        <div class="form-floating mb-4">
+                            <input asp-for="Street" class="form-control bg-light border-0 shadow-none" placeholder="الشارع" style="border-radius: 0.75rem;" />
+                            <label asp-for="Street" class="text-secondary">اسم الشارع، رقم المبنى</label>
+                            <span asp-validation-for="Street" class="text-danger small mt-2 d-block fw-semibold"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                            <a asp-controller="Cart" asp-action="Index" class="btn btn-link text-decoration-none text-muted fw-bold px-0">
+                                <i class="bi bi-arrow-right me-1"></i> العودة للسلة
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm px-4" style="border-radius: 0.75rem;">
+                                متابعة الطلب <i class="bi bi-lock-fill ms-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

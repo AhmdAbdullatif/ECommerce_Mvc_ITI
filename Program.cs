@@ -1,14 +1,18 @@
 using ECommerce_Mvc.Data;
 using ECommerce_Mvc.Extensions;
 using ECommerce_Mvc.Models;
-using ECommerce_Mvc.Repositories.Interfaces;
 using ECommerce_Mvc.Repositories.Implementations;
-using ECommerce_Mvc.Services.Interfaces;
+using ECommerce_Mvc.Repositories.Interfaces;
 using ECommerce_Mvc.Services.Implementations;
+using ECommerce_Mvc.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -34,14 +38,15 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 
 builder.Services.AddScoped<ICartRepository, CartRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductService, ECommerce_Mvc.Services.Implementations.ProductService>();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountService, ECommerce_Mvc.Services.Implementations.AccountService>();
 
 builder.Services.AddScoped<ICartService, CartService>();
 
 builder.Services.AddScoped<IAnonymousCartManager, AnonymousCartManager>();
+
 
 
 var app = builder.Build();
