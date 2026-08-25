@@ -1,7 +1,19 @@
-﻿@model ECommerce_Mvc.Models.Product
+﻿@using Microsoft.EntityFrameworkCore
+@model ECommerce_Mvc.Models.Product
+@inject ECommerce_Mvc.Data.AppDbContext DbContext
 
 @{
     ViewData["Title"] = "Product Details";
+
+    var reviews = await DbContext.Reviews
+        .Include(r => r.User)
+        .Where(r => r.ProductId == Model.Id)
+        .OrderByDescending(r => r.CreatedAtUtc)
+        .ToListAsync();
+
+    double avgRating = reviews.Any()
+        ? reviews.Average(r => r.Rating)
+        : 0;
 }
 
 <style>
@@ -15,7 +27,7 @@
     }
 
     .img-container {
-        background-color: #0d1326; /* لون أغمق قليلاً للصورة لإبرازها */
+        background-color: #0d1326;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -41,7 +53,7 @@
     }
 
     .info-pill {
-        background-color: rgba(212, 175, 55, 0.1); /* خلفية ذهبية شفافة */
+        background-color: rgba(212, 175, 55, 0.1);
         color: var(--accent-gold, #D4AF37);
         border: 1px solid rgba(212, 175, 55, 0.2);
         border-radius: 50px;
@@ -71,6 +83,71 @@
         font-weight: 500;
         font-size: 1.1rem;
     }
+
+    /* =========================
+           Reviews
+           ========================= */
+
+    .reviews-wrapper {
+        background-color: var(--bg-surface, #161D2F);
+        border: 1px solid var(--border-color, #2A3449);
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .review-card {
+        background-color: #0d1326;
+        border: 1px solid var(--border-color, #2A3449);
+        border-radius: 1rem;
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .review-rating {
+        color: var(--accent-gold, #D4AF37);
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .review-user {
+        color: var(--text-muted, #94A3B8);
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .review-comment {
+        color: var(--text-main, #E2E8F0);
+        margin-top: 0.4rem;
+        margin-bottom: 0;
+    }
+
+    .avg-rating-badge {
+        background-color: rgba(212, 175, 55, 0.1);
+        color: var(--accent-gold, #D4AF37);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-radius: 50px;
+        padding: 0.4rem 1.2rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .review-form select,
+    .review-form textarea {
+        background-color: #0d1326;
+        border: 1px solid var(--border-color, #2A3449);
+        color: var(--text-main, #E2E8F0);
+    }
+
+        .review-form select:focus,
+        .review-form textarea:focus {
+            background-color: #0d1326;
+            color: var(--text-main, #E2E8F0);
+            border-color: var(--accent-gold, #D4AF37);
+            box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.15);
+        }
 </style>
 
 <div class="container py-5">
@@ -78,63 +155,98 @@
     <!-- Header & Back Button -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold mb-0 text-white">Product Details</h2>
-        <a asp-action="Index" class="btn btn-outline-gold rounded-pill px-4 py-2 fw-semibold">
+
+        <a asp-action="Index"
+               class="btn btn-outline-gold rounded-pill px-4 py-2 fw-semibold">
             &larr; Back to Products
         </a>
     </div>
 
-    <!-- Details Card -->
+    <!-- =========================
+         Product Details
+         ========================= -->
+
     <div class="details-wrapper">
+
         <div class="row g-0">
 
             <!-- Left Column: Image -->
             <div class="col-lg-6 border-end border-secondary border-opacity-25">
+
                 <div class="img-container">
+
                     @if (!string.IsNullOrWhiteSpace(Model.PictureUri))
                     {
-                        <img src="~/images/@Model.PictureUri" class="details-img" alt="@Model.Name" />
+                        <img src="~/images/@Model.PictureUri"
+                             class="details-img"
+                             alt="@Model.Name" />
                     }
                     else
                     {
                         <div class="text-muted d-flex flex-column align-items-center justify-content-center h-100">
-                            <!-- أيقونة بديلة في حالة عدم وجود صورة -->
-                            <span style="font-size: 4rem;">&#x1F4F7;</span>
-                            <span class="mt-2">No Image Available</span>
+
+                            <span style="font-size: 4rem;">
+                                &#x1F4F7;
+                            </span>
+
+                            <span class="mt-2">
+                                No Image Available
+                            </span>
+
                         </div>
                     }
+
                 </div>
+
             </div>
 
             <!-- Right Column: Product Info -->
             <div class="col-lg-6">
+
                 <div class="details-content d-flex flex-column h-100">
 
-                    <!-- Category Pill -->
+                    <!-- Category -->
                     <div class="mb-3">
+
                         <span class="info-pill mb-2">
                             @(Model.Category?.Name ?? "Uncategorized")
                         </span>
+
                     </div>
 
-                    <!-- Title & Description -->
-                    <h1 class="fw-bolder text-white mb-3">@Model.Name</h1>
+                    <!-- Title -->
+                    <h1 class="fw-bolder text-white mb-3">
+                        @Model.Name
+                    </h1>
 
-                    <p class="text-muted lh-lg mb-4" style="font-size: 1.05rem;">
+                    <!-- Description -->
+                    <p class="text-muted lh-lg mb-4"
+                           style="font-size: 1.05rem;">
                         @Model.Description
                     </p>
 
                     <!-- Price -->
                     <div class="mb-4">
-                        <span class="price-tag">$@Model.Price.ToString("0.00")</span>
+
+                        <span class="price-tag">
+                            $@Model.Price.ToString("0.00")
+                        </span>
+
                     </div>
 
                     <hr class="border-secondary opacity-25 my-4" />
 
-                    <!-- Specifications Grid -->
+                    <!-- Specifications -->
                     <div class="row g-4 mb-5">
+
                         <div class="col-6">
-                            <div class="spec-label mb-1">Availability</div>
+
+                            <div class="spec-label mb-1">
+                                Availability
+                            </div>
+
                             <div class="spec-value">
+
                                 @if (Model.Quantity > 0)
                                 {
                                     <span class="text-success fw-bold">
@@ -147,37 +259,236 @@
                                         &#x2718; Out of Stock
                                     </span>
                                 }
+
                             </div>
+
                         </div>
+
                         <div class="col-6">
-                            <div class="spec-label mb-1">Added On</div>
-                            <div class="spec-value">@Model.CreatedAtUtc.ToString("dd MMM yyyy")</div>
+
+                            <div class="spec-label mb-1">
+                                Added On
+                            </div>
+
+                            <div class="spec-value">
+                                @Model.CreatedAtUtc.ToString("dd MMM yyyy")
+                            </div>
+
                         </div>
+
                     </div>
 
-                    <!-- Add to Cart Action -->
+                    <!-- Add to Cart -->
                     <div class="mt-auto">
-                        <form asp-controller="Cart" asp-action="AddItem" method="post" class="d-flex gap-2">
+
+                        <form asp-controller="Cart"
+                              asp-action="AddItem"
+                              method="post"
+                              class="d-flex gap-2">
+
                             @Html.AntiForgeryToken()
 
-                            <input type="hidden" name="ProductId" value="@Model.Id" />
+                            <input type="hidden"
+                                   name="ProductId"
+                                   value="@Model.Id" />
 
                             <div class="flex-grow-1">
-                                <input type="number" name="Quantity" value="1" min="1" class="form-control" style="max-width:140px;" />
+
+                                <input type="number"
+                                       name="Quantity"
+                                       value="1"
+                                       min="1"
+                                       class="form-control"
+                                       style="max-width:140px;" />
+
                             </div>
 
                             <div style="width:100%">
-                                <button type="submit" class="btn btn-gold btn-lg w-100 rounded-pill fw-bold shadow" 
-                                        @(Model.Quantity <= 0 ? "disabled" : "")>
+
+                                <button type="submit"
+                                        class="btn btn-gold btn-lg w-100 rounded-pill fw-bold shadow"
+                                    @(Model.Quantity <= 0 ? "disabled" : "")>
+
                                     Add to Cart
+
                                 </button>
+
                             </div>
+
                         </form>
+
                     </div>
 
                 </div>
+
             </div>
 
         </div>
+
     </div>
+
+
+    <!-- =========================
+         Reviews Section
+         ========================= -->
+
+    <div class="reviews-wrapper">
+
+        <!-- Reviews Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h3 class="fw-bold text-white mb-0">
+                Reviews (@reviews.Count)
+            </h3>
+
+            <span class="avg-rating-badge">
+
+                &#9733;
+                @avgRating.ToString("0.0") / 5
+
+            </span>
+
+        </div>
+
+
+        <!-- Reviews List -->
+        @if (!reviews.Any())
+        {
+            <p class="text-muted">
+                No reviews yet.
+            </p>
+        }
+        else
+        {
+            foreach (var review in reviews)
+            {
+                <div class="review-card">
+
+                    <div class="d-flex justify-content-between">
+
+                        <span class="review-rating">
+
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= review.Rating)
+                                {
+                                    <span>&#9733;</span>
+                                }
+                                else
+                                {
+                                    <span>&#9734;</span>
+                                }
+                            }
+
+                            <span class="ms-2">
+                                @review.Rating/5
+                            </span>
+
+                        </span>
+
+                        <span class="review-user">
+
+                            @(review.User?.UserName ?? "Customer")
+
+                        </span>
+
+                    </div>
+
+                    <p class="review-comment">
+                        @review.Comment
+                    </p>
+
+                    <small class="text-muted">
+
+                        @review.CreatedAtUtc
+                        .ToLocalTime()
+                        .ToString("dd MMM yyyy")
+
+                    </small>
+
+                </div>
+            }
+        }
+
+
+        <!-- Add Review -->
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            @if (TempData["ReviewError"] != null)
+            {
+                <div class="alert alert-danger mt-3">
+                    @TempData["ReviewError"]
+                </div>
+            }
+
+            @if (TempData["ReviewSuccess"] != null)
+            {
+                <div class="alert alert-success mt-3">
+                    @TempData["ReviewSuccess"]
+                </div>
+            }
+
+            <hr class="border-secondary opacity-25 my-4" />
+
+            <h5 class="text-white mb-3">
+                Write a Review
+            </h5>
+
+            <form asp-controller="Reviews"
+                  asp-action="Create"
+                  method="post"
+                  class="review-form">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="productId"
+                       value="@Model.Id" />
+
+                <div class="mb-3">
+
+                    <label class="spec-label d-block mb-1">
+                        Rating
+                    </label>
+
+                    <select name="rating"
+                            class="form-select"
+                            style="max-width:150px;">
+
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="spec-label d-block mb-1">
+                        Comment
+                    </label>
+
+                    <textarea name="comment"
+                              class="form-control"
+                              rows="3"
+                              maxlength="1000"
+                              required></textarea>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-gold rounded-pill px-4 fw-bold">
+
+                    Submit Review
+
+                </button>
+
+            </form>
+        }
+
+    </div>
+
 </div>
