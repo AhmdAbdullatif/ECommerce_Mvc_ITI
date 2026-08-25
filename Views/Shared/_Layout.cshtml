@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using ECommerce_Mvc.Constants
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -142,7 +143,22 @@
                     @if (User.IsInRole("Administrators"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link fw-semibold" href="/Dashboard">Dashboard</a>
+                            <a class="nav-link active fw-semibold"
+                                   asp-controller="Admin"
+                                   asp-action="Dashboard">
+                                Dashboard
+                            </a>
+                        </li>
+                    }
+
+                    @if (User.IsInRole(AuthorizationConstants.SELLERS))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link active fw-semibold"
+                                   asp-controller="SellerDashboard"
+                                   asp-action="Index">
+                                Dashboard
+                            </a>
                         </li>
                     }
                 </ul>
