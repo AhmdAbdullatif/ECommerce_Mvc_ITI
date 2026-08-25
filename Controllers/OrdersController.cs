@@ -1,4 +1,6 @@
-﻿using ECommerce_Mvc.Data;
+﻿using System.ClientModel.Primitives;
+using ECommerce_Mvc.Configuration;
+using ECommerce_Mvc.Data;
 using ECommerce_Mvc.Models;
 using ECommerce_Mvc.Services.Interfaces;
 using ECommerce_Mvc.ViewModels;
@@ -6,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Stripe.Checkout;
 
 namespace ECommerce_Mvc.Controllers
@@ -16,12 +19,17 @@ namespace ECommerce_Mvc.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAnonymousCartManager _anonymousCartManager;
+        private readonly StripeOptions _stripeOptions;
 
-        public OrdersController(AppDbContext context, UserManager<ApplicationUser> userManager, IAnonymousCartManager anonymousCartManager)
+        public OrdersController(AppDbContext context,
+            UserManager<ApplicationUser> userManager,
+            IAnonymousCartManager anonymousCartManager,
+            IOptions<StripeOptions> stripeOptions)
         {
             _context = context;
             _userManager = userManager;
             _anonymousCartManager = anonymousCartManager;
+            _stripeOptions = stripeOptions.Value;
         }
 
         [HttpGet]
@@ -53,7 +61,7 @@ namespace ECommerce_Mvc.Controllers
                 return View("Checkout", model);
             }
 
-            var domain = "https://localhost:7080";
+            var domain = _stripeOptions.Domain;
             var lineItems = new List<SessionLineItemOptions>();
 
             foreach (var item in cart.Items)
@@ -76,7 +84,7 @@ namespace ECommerce_Mvc.Controllers
             }
 
             // تم إضافة حقول الدولة والمحافظة لتخزينها في Metadata وتجنب خطأ قاعدة البيانات
-            var options = new SessionCreateOptions
+            var sessionOptions = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },
                 LineItems = lineItems,
@@ -94,12 +102,17 @@ namespace ECommerce_Mvc.Controllers
                 }
             };
 
+            var requestOptions = new Stripe.RequestOptions()
+            {
+                ApiKey = _stripeOptions.SecretKey,
+            };
+
             var service = new SessionService();
             Session session;
 
             try
             {
-                session = service.Create(options);
+                session = await service.CreateAsync(sessionOptions, requestOptions);
             }
             catch (Exception ex)
             {

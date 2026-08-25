@@ -1,3 +1,4 @@
+using ECommerce_Mvc.Configuration;
 using ECommerce_Mvc.Data;
 using ECommerce_Mvc.Extensions;
 using ECommerce_Mvc.Models;
@@ -26,8 +27,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
-// Identity
 
+builder.Services.Configure<StripeOptions>(builder.Configuration.GetSection(StripeOptions.SectionName));
 
 builder.Services.AddScoped<ISellerService, SellerService>();
 builder.Services.AddControllersWithViews();
