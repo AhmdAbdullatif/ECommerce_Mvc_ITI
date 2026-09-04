@@ -1,4 +1,5 @@
-﻿using ECommerce_Mvc.Models;
+﻿using ECommerce_Mvc.Constants;
+using ECommerce_Mvc.Models;
 using ECommerce_Mvc.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +40,7 @@ namespace ECommerce_Mvc.Controllers
             // 2. صلاحيات المستخدم العادي (Customer)
             // ==========================================
             [HttpPost]
+            [ValidateAntiForgeryToken]
             public async Task<IActionResult> SubmitRequest()
             {
                 var userId = _userManager.GetUserId(User);
@@ -61,7 +63,7 @@ namespace ECommerce_Mvc.Controllers
             // ==========================================
             // 3. صلاحيات الإدارة (Admin)
             // ==========================================
-            [Authorize(Roles = "Admin")]
+            [Authorize(Roles = AuthorizationConstants.ADMINISTRATORS)]
             [HttpGet]
             public async Task<IActionResult> PendingRequests()
             {
@@ -70,8 +72,9 @@ namespace ECommerce_Mvc.Controllers
                 return View(requests);
             }
 
-            [Authorize(Roles = "Admin")]
+            [Authorize(Roles = AuthorizationConstants.ADMINISTRATORS)]
             [HttpPost]
+            [ValidateAntiForgeryToken]
             public async Task<IActionResult> ApproveRequest(int id)
             {
                 var adminId = _userManager.GetUserId(User);
@@ -85,8 +88,9 @@ namespace ECommerce_Mvc.Controllers
                 return RedirectToAction(nameof(PendingRequests));
             }
 
-            [Authorize(Roles = "Admin")]
+            [Authorize(Roles = AuthorizationConstants.ADMINISTRATORS)]
             [HttpPost]
+            [ValidateAntiForgeryToken]
             public async Task<IActionResult> RejectRequest(int id)
             {
                 var adminId = _userManager.GetUserId(User);

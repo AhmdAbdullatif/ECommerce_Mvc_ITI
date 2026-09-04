@@ -125,9 +125,31 @@
 <div class="premium-wrapper">
     <div class="container">
 
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
         <!-- Header Section -->
         <div class="d-flex justify-content-between align-items-center mb-5">
             <h2 class="fw-bold mb-0 text-white">Our Collection</h2>
+            <div class="d-flex gap-2">
+            @if (User.IsInRole(AuthorizationConstants.ADMINISTRATORS))
+            {
+                <a asp-controller="Seller" asp-action="PendingRequests" class="btn btn-outline-gold rounded-pill px-4 py-2 shadow-sm">
+                    <i class="bi bi-person-lines-fill me-1"></i> Pending Seller Requests
+                </a>
+            }
             @if (User.IsInRole(AuthorizationConstants.SELLERS))
             {
                 <!-- تحديد Product Controller -->
@@ -135,6 +157,7 @@
                     + Add New Product
                 </a>
             }
+            </div>
         </div>
 
         <!-- Filter & Search Section -->
@@ -244,4 +267,3 @@
         }
     </div>
 </div>
-
